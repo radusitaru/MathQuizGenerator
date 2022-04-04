@@ -23,6 +23,8 @@ public class QuizServlet extends HttpServlet {
 
         {
 
+            //Methods imported from Main
+
             try {
                 //get name of player/user
                 name = getName();
@@ -34,7 +36,7 @@ public class QuizServlet extends HttpServlet {
                 String level1 = generateTwoOpLevel(1, 10, "+", "-");
 
                 //calculate expression result
-                calculateExpression(level1);
+//                calculateExpression(level1);
 
                 String action = req.getParameter("answer"); // name as in the html form
 
@@ -45,7 +47,7 @@ public class QuizServlet extends HttpServlet {
                 //save details of quiz in database
 
 
-                Database.saveInDB(name, date, score(score, nrOfLevels), quizTime(endTime, startTime), expressions[0], expressions[1], expressions[2], expressions[3], expressions[4]);
+//                Database.saveInDB(name, date, score(score, nrOfLevels), quizTime(endTime, startTime), expressions[0], expressions[1], expressions[2], expressions[3], expressions[4]);
 
 
                 Database.getFromDB();
