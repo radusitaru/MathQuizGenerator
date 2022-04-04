@@ -77,7 +77,7 @@ public class Main extends GenerateExpression {
     static ScriptEngineManager sem = new ScriptEngineManager();
 
     public static String[] expressions = new String[5];
-    static int expressionCounter = 0;
+    static public int expressionCounter = 0;
 
     public static LocalDate date = LocalDate.now();
     public static LocalTime startTime;
@@ -132,7 +132,7 @@ public class Main extends GenerateExpression {
             exArray();
             result = printStringArray(exArray);
 
-            //calculating expression result
+            //calculating expression result in order to leave only integral results
             ScriptEngine level1 = sem.getEngineByName("JavaScript");
             double doubleResult = parseDouble(String.valueOf(level1.eval(result)));
             if (doubleResult % 2 == 0) {
@@ -189,4 +189,5 @@ public class Main extends GenerateExpression {
         System.out.println("Your score: " + (score / nrOfLevels) * 100);
         return (score / nrOfLevels) * 100;
     }
+
 }

@@ -98,4 +98,8 @@ public class GenerateExpression {
         return mathString;
     }
 
+static public void addAnswer(String[] answerArray){
+
+}
+
 }
