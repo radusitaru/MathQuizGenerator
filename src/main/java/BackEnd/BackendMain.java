@@ -31,7 +31,7 @@ import static java.lang.Double.parseDouble;
  * MAIN
  * --------------------------------------------------------------------------------
  */
-public class Main extends GenerateExpression {
+public class BackendMain extends GenerateExpression {
 
     public static void Main(String[] args) throws ScriptException {
         try {
@@ -40,18 +40,11 @@ public class Main extends GenerateExpression {
             e.printStackTrace();
         }
 
-        //get name of player/user
-        name = getName();
 
         //get start time
         startTime = getTime();
 
-        //run math levels - they can be modified by using different numbers/operators/methods
-        calculateExpression(generateTwoOpLevel(1, 10, "+", "-"));
-//        runLevel(generateTwoOpLevel(2, 3, "*", "/"));
-//        runLevel(generateFourOpLevel(3, 3, "+", "-", "*", "/"));
-//        runLevel(generateTwoOpLevel(4, 5, "*", "/"));
-//        runLevel(generateFourOpLevel(5, 5, "+", "-", "*", "/"));
+
 
         //get end time
         endTime = getTime();
@@ -72,12 +65,11 @@ public class Main extends GenerateExpression {
     public static int score = 0;
     public static int nrOfLevels = 0;
 
-    static Scanner sc = new Scanner(System.in);
+    static public String dbNames[]=new String[5];
 
     static ScriptEngineManager sem = new ScriptEngineManager();
 
-    public static String[] expressions = new String[5];
-    static public int expressionCounter = 0;
+    public static String[] level = new String[5];
 
     public static LocalDate date = LocalDate.now();
     public static LocalTime startTime;
@@ -106,17 +98,6 @@ public class Main extends GenerateExpression {
 
     /**
      * --------------------------------------------------------------------------------
-     * Method for getting the name of the user/player
-     * --------------------------------------------------------------------------------
-     */
-    public static String getName() {
-        System.out.println("Please enter your name: ");
-        return sc.nextLine();
-    }
-
-
-    /**
-     * --------------------------------------------------------------------------------
      * Method for generating numbers with 2 different operators that give %2 = 0, meaning no rest.
      * --------------------------------------------------------------------------------
      */
@@ -138,36 +119,50 @@ public class Main extends GenerateExpression {
             if (doubleResult % 2 == 0) {
                 System.out.println("Expression: " + printStringArray(exArray));
                 stop = true;
-                //saving expression
-                expressions[expressionCounter] = printStringArray(exArray);
+
             }
         }
         while (!stop);
 
-        //increasing expression counter to make space for next expression in array
-        expressionCounter++;
 
         //increasing number of levels for calculating final score
         nrOfLevels++;
 
         return result;
-
     }
+
+        /**
+         * --------------------------------------------------------------------------------
+         * Method for activating the generation of levels
+         * --------------------------------------------------------------------------------
+         */
+        public static void generateLevels(){
+
+            try {
+                level[0] = generateTwoOpLevel(1, 10, "+", "-");
+                level[1] = generateTwoOpLevel(2, 10, "+", "-");
+                level[2] = generateTwoOpLevel(3, 10, "+", "-");
+                level[3] = generateTwoOpLevel(4, 10, "+", "-");
+                level[4] = generateTwoOpLevel(5, 10, "+", "-");
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     /**
      * --------------------------------------------------------------------------------
      * Method for running mathematical levels
      * --------------------------------------------------------------------------------
      */
-    public static void calculateExpression(String generatedExpression) throws ScriptException {
+    public static void calculateExpression(String generatedExpression, String userResult) throws ScriptException {
 
-        ScriptEngine level1 = sem.getEngineByName("JavaScript");
-        double doubleResult = parseDouble(String.valueOf(level1.eval(generatedExpression)));
+        ScriptEngine level = sem.getEngineByName("JavaScript");
+        String generatedExpressionResult = String.valueOf(level.eval(generatedExpression));
 
-        System.out.println("Correct result: " + doubleResult);
-        System.out.println("Insert result: ");
+        System.out.println("Answer " + generatedExpressionResult);
 
-        if (sc.nextInt() == doubleResult) {
+        if (generatedExpressionResult.equalsIgnoreCase(userResult)) {
 
             //increasing score for calculating final score
             score++;
@@ -189,5 +184,4 @@ public class Main extends GenerateExpression {
         System.out.println("Your score: " + (score / nrOfLevels) * 100);
         return (score / nrOfLevels) * 100;
     }
-
 }

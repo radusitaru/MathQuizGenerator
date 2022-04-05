@@ -1,6 +1,6 @@
 <%@ page import="java.util.Locale" %>
-<%@ page import="static BackEnd.Main.generateTwoOpLevel" %>
-<%@ page import="static BackEnd.Main.*" %><%--
+<%@ page import="static BackEnd.BackendMain.generateTwoOpLevel" %>
+<%@ page import="static BackEnd.BackendMain.*" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 04.04.2022
@@ -14,54 +14,64 @@
     <title>MATH QUIZ</title>
 
 
-    <form name="result" action="results.jsp" method="POST">
+    <form name="result" action="quizCalculation" method="POST">
+
+        <div>
+            <h1 style="background-color:rgb(240, 200, 180);">
+                <b>Enter your name!</b>
+
+
+                <input type="text" name="resultName" id="resultName">
+            </h1>
+        </div>
+
+
         <div>
             <h1 style="background-color:rgb(240, 240, 240);">
-            <b>Level 1:</b>
-            <%=expressions[0]%>
+                <b>Level 1:</b>
+                    <%=level[0]%>
         </div>
-        Answer: <input type="text" name="result" id="result1">
+        Answer: <input type="text" name="result1" id="result1">
         </h1>
         <div>
 
 
             <h1 style="background-color:rgb(220, 220, 220);">
-            <b>Level 2:</b>
-            <%=expressions[1]%>
+                <b>Level 2:</b>
+                    <%=level[1]%>
         </div>
-        Answer: <input type="text" name="result" id="result2"/>
+        Answer: <input type="text" name="result2" id="result2"/>
         </h1>
         <div>
 
 
             <h1 style="background-color:rgb(200, 200, 200);">
-            <b>Level 3:</b>
-            <%=expressions[2]%>
+                <b>Level 3:</b>
+                    <%=level[2]%>
         </div>
-        Answer: <input type="text" name="result" id="result3"/>
+        Answer: <input type="text" name="result3" id="result3"/>
         </h1>
         <div>
 
 
             <h1 style="background-color:rgb(180, 180, 180);">
-            <b>Level 4:</b>
-            <%=expressions[3]%>
+                <b>Level 4:</b>
+                    <%=level[3]%>
         </div>
-        Answer: <input type="text" name="result" id="result4"/>
+        Answer: <input type="text" name="result4" id="result4"/>
         </h1>
         <div>
 
 
             <h1 style="background-color:rgb(160, 160, 160);">
-            <b>Level 5:</b>
-            <%=expressions[4]%>
+                <b>Level 5:</b>
+                    <%=level[4]%>
         </div>
-        Answer: <input type="text" name="result" id="result5"/>
+        Answer: <input type="text" name="result5" id="result5"/>
         </h1>
 
         <div>
-        <input type="submit" value="Submit"/>
-            <input type="hidden" id="action" name="action" value="NEW">
+            <input type="submit" value="Submit"/>
         </div>
     </form>
 

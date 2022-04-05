@@ -7,8 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class Database extends Ranking {
 
+public class Database extends BackendRanking {
 
 
     /**
@@ -17,10 +17,8 @@ public class Database extends Ranking {
      * --------------------------------------------------------------------------------
      */
 
-    static private int maxScoreDB;
-
     // Create list for ranking
-    static public List<Ranking> scoresFromDB = new ArrayList<>();
+    static public List<BackendRanking> scoresFromDB = new ArrayList<>();
 
 
     /**
@@ -29,7 +27,7 @@ public class Database extends Ranking {
      * --------------------------------------------------------------------------------
      */
 
-    public static void saveInDB(String name, LocalDate date, double score, long seconds, String level1Expression, String level2Expression, String level3Expression, String level4Expression, String level5Expression) {
+    public static void saveInDB(String name, String date, double score, long seconds, String level1Expression, String level2Expression, String level3Expression, String level4Expression, String level5Expression) {
         int val = 0;
 
         try {
@@ -41,7 +39,7 @@ public class Database extends Ranking {
             Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             // Create query
-            PreparedStatement pSt = conn.prepareStatement("INSERT INTO stats (name,date,score,time,lvl1,lvl2,lvl3,lvl4,lvl5) VALUES(?,?,?,?,?,?,?,?,?)");
+            PreparedStatement pSt = conn.prepareStatement("INSERT INTO stats (name,date,score,time,lvl1,lvl2,lvl3,lvl4,lvl5,javaid) VALUES(?,?,?,?,?,?,?,?,?,?)");
             pSt.setString(1, name);
             pSt.setDate(2, Date.valueOf(date));
             pSt.setDouble(3, score);
@@ -72,15 +70,15 @@ public class Database extends Ranking {
     public static void getFromDB() {
 
         try {
-        // Connect to database
-        final String URL = "jdbc:postgresql://localhost/";
-        final String USERNAME = "postgres";
-        final String PASSWORD = System.getenv("PWD");
+            // Connect to database
+            final String URL = "jdbc:postgresql://localhost/";
+            final String USERNAME = "postgres";
+            final String PASSWORD = System.getenv("PWD");
             Class.forName("org.postgresql.Driver");
-        Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             // Create query
-            PreparedStatement pSt = conn.prepareStatement("select name,score,time,date from stats");
+            PreparedStatement pSt = conn.prepareStatement("select name,score,time,date,dbid from stats");
 
             // Execution
             ResultSet rs = pSt.executeQuery();
@@ -93,22 +91,15 @@ public class Database extends Ranking {
 
 
                 // randul curent
-                Ranking rank = new Ranking();
+                BackendRanking rank = new BackendRanking();
                 rank.setName(rs.getString("name"));
                 rank.setScore(rs.getInt("score"));
                 rank.setTime(rs.getInt("time"));
-                rank.setDate(rs.getDate("date"));
+                rank.setDate(rs.getString("date"));
+                rank.setDBid(rs.getInt("dbid"));
                 scoresFromDB.add(rank);
             }
 
-            //sorting list
-            Comparator<Ranking> comparator = Comparator.comparing(Ranking::getScore,Comparator.reverseOrder());
-            comparator = comparator.thenComparing(Ranking::getTime);
-            scoresFromDB.sort(comparator);
-
-            for (Ranking ranking : scoresFromDB) {
-                System.out.println(ranking);
-            }
             rs.close();
             pSt.close();
             conn.close();
@@ -117,5 +108,69 @@ public class Database extends Ranking {
             e.printStackTrace();
         }
     }
-}
+
+    /**
+     * --------------------------------------------------------------------------------
+     * Method for saving sorting scores in DB
+     * --------------------------------------------------------------------------------
+     */
+
+    public static void sortBackendList() {
+        //get data from DB to list
+        getFromDB();
+
+        //sorting list from DB in scoresFromDB
+        Comparator<BackendRanking> comparator = Comparator.comparing(BackendRanking::getScore, Comparator.reverseOrder());
+        comparator = comparator.thenComparing(BackendRanking::getTime);
+        scoresFromDB.sort(comparator);
+
+        for (int i = 0; i < scoresFromDB.size(); i++) {
+            scoresFromDB.get(i).setPosition(i);
+        }
+    }
+
+    /**
+     * --------------------------------------------------------------------------------
+     * Method for updating new positions & scores into DB
+     * --------------------------------------------------------------------------------
+     */
+    public static void UpdateDB() {
+
+        //sort list based on position
+        sortBackendList();
+
+        //counter used for iterating the DB update query below
+        int row = 0;
+
+        try {
+
+            // Connect to database
+            final String URL = "jdbc:postgresql://localhost/";
+            final String USERNAME = "postgres";
+            final String PASSWORD = System.getenv("PWD");
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+            // Insert sorted list back to DB -- the correct rows to introduce each sorted item are found based on DBid which is pulled to backend scoresFromDB from getFromDB method
+            while (row < scoresFromDB.size()) {
+                PreparedStatement pSt = conn.prepareStatement("UPDATE stats SET position=? WHERE dbid=?");
+                pSt.setInt(2, scoresFromDB.get(row).getDBid());
+                pSt.setInt(1, scoresFromDB.get(row).getPosition());
+                row++;
+                pSt.executeUpdate();
+                pSt.close();
+            }
+            conn.close();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+
+        }
+    }
+  public static int rankingInDB(BackendRanking trial){
+      return trial.getPosition();
+
+
+
+  }
+    }
 
