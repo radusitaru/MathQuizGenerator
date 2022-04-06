@@ -1,13 +1,26 @@
 package BackEnd;
 
+import java.util.Random;
+
 public class BackendRanking implements Comparable<BackendRanking> {
 
+    static private Random randomNr = new Random();
+    static private int generatedNr;
     private int score;
     private int time;
     private String name;
     private String date;
     private int position;
     private int DBid;
+    private String javaid;
+
+    public String getJavaid() {
+        return this.javaid;
+    }
+
+    public void setJavaid(String name) {
+        this.javaid = String.valueOf(randomNr.nextInt(22222222)).concat(name).concat(BackendMain.date.toString());
+    }
 
     public String getDate() {
         return date;

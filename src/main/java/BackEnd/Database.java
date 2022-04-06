@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 
 
-
 public class Database extends BackendRanking {
 
 
@@ -20,6 +19,16 @@ public class Database extends BackendRanking {
     // Create list for ranking
     static public List<BackendRanking> scoresFromDB = new ArrayList<>();
 
+    public static String getMyRanking() {
+        return myRanking;
+    }
+
+    public static void setMyRanking(String myRanking) {
+        Database.myRanking = myRanking;
+    }
+
+    static public String myRanking;
+
 
     /**
      * --------------------------------------------------------------------------------
@@ -27,7 +36,7 @@ public class Database extends BackendRanking {
      * --------------------------------------------------------------------------------
      */
 
-    public static void saveInDB(String name, String date, double score, long seconds, String level1Expression, String level2Expression, String level3Expression, String level4Expression, String level5Expression) {
+    public static void saveInDB(String name, LocalDate date, double score, long seconds, String level1Expression, String level2Expression, String level3Expression, String level4Expression, String level5Expression, String javaid) {
         int val = 0;
 
         try {
@@ -49,6 +58,7 @@ public class Database extends BackendRanking {
             pSt.setString(7, level3Expression);
             pSt.setString(8, level4Expression);
             pSt.setString(9, level5Expression);
+            pSt.setString(10, javaid);
 
             // Execute
             val = pSt.executeUpdate();
@@ -166,11 +176,37 @@ public class Database extends BackendRanking {
 
         }
     }
-  public static int rankingInDB(BackendRanking trial){
-      return trial.getPosition();
 
-
-
-  }
+    public static int rankingInDB(BackendRanking trial) {
+        return trial.getPosition();
     }
 
+    public static void calculateMyRank(String javaid) {
+        String totalRanks = String.valueOf(scoresFromDB.size());
+        int myPosition = 0;
+        try {
+            // Connect to database
+            final String URL = "jdbc:postgresql://localhost/";
+            final String USERNAME = "postgres";
+            final String PASSWORD = System.getenv("PWD");
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+            // Create query and execute
+            PreparedStatement pSt = conn.prepareStatement("select position from stats WHERE javaid=? ");
+            pSt.setString(1, javaid);
+            ResultSet rs = pSt.executeQuery();
+            while (rs.next()) {
+                myPosition = rs.getInt("position");
+                setMyRanking("You ranked " + myPosition + " out of " + totalRanks);
+            }
+
+
+            pSt.close();
+            conn.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}

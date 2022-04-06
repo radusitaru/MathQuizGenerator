@@ -1,6 +1,5 @@
 package FrontEnd;
 
-import BackEnd.BackendMain;
 import BackEnd.BackendRanking;
 import BackEnd.Database;
 
@@ -16,8 +15,11 @@ import java.io.IOException;
 
 import static BackEnd.BackendMain.*;
 
+
 @WebServlet("/quizCalculation")
 public class QuizCalculation extends HttpServlet {
+
+    public static BackendRanking insertedTrial = new BackendRanking();
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
@@ -25,8 +27,9 @@ public class QuizCalculation extends HttpServlet {
         {
             try {
                 String resultName = req.getParameter("resultName");
-                BackendRanking insertedTrial = new BackendRanking();
                 insertedTrial.setName(resultName);
+                insertedTrial.setJavaid(resultName);
+                System.out.println("Javaid"+insertedTrial.getJavaid());
 
                 String result1 = req.getParameter("result1");
                 String result2 = req.getParameter("result2");
@@ -41,21 +44,28 @@ public class QuizCalculation extends HttpServlet {
                 calculateExpression(level[4], result5);
 
 
-                RequestDispatcher rd = req.getRequestDispatcher("results.jsp");
-                try {
-                    rd.forward(req, resp);
-                } catch (ServletException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
 
                 //get end time
                 endTime = getTime();
 
-                //save details of quiz in database
-                Database.saveInDB(resultName, insertedTrial.getDate(), score(score, nrOfLevels), quizTime(endTime, startTime), level[0], level[1], level[2], level[3], level[4]);
+                //calculate quiz time
 
+                myQuizTime= (int) quizTime(startTime,endTime);
+
+                //save details of quiz in database
+                Database.saveInDB(resultName, date, score(score, nrOfLevels), quizTime(endTime, startTime), level[0], level[1], level[2], level[3], level[4], insertedTrial.getJavaid());
+
+                Database.getFromDB();
+                Database.UpdateDB();
+                Database.calculateMyRank(QuizCalculation.insertedTrial.getJavaid());
+
+                RequestDispatcher rd = req.getRequestDispatcher("results.jsp");
+                try {
+                    rd.forward(req, resp);
+                } catch (ServletException | IOException e) {
+                    e.printStackTrace();
+                }
 
             } catch (ScriptException e) {
                 e.printStackTrace();

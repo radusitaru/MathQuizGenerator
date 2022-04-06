@@ -62,6 +62,8 @@ public class BackendMain extends GenerateExpression {
      */
     public static String name;
 
+    public static int myQuizTime;
+
     public static int score = 0;
     public static int nrOfLevels = 0;
 
@@ -91,7 +93,7 @@ public class BackendMain extends GenerateExpression {
      * Method for calculating time spent on quiz
      * --------------------------------------------------------------------------------
      */
-    public static long quizTime(LocalTime startTime, LocalTime endTime) {
+    public static long quizTime(LocalTime endTime, LocalTime startTime) {
         System.out.println("You spent " + ChronoUnit.SECONDS.between(endTime, startTime) + " seconds on completing the quiz");
         return ChronoUnit.SECONDS.between(endTime, startTime);
     }
