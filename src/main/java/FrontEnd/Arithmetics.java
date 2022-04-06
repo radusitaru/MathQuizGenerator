@@ -37,11 +37,11 @@ public class Arithmetics extends HttpServlet {
                 String result4 = req.getParameter("result4");
                 String result5 = req.getParameter("result5");
 
-                calculateExpression(level[0], result1);
-                calculateExpression(level[1], result2);
-                calculateExpression(level[2], result3);
-                calculateExpression(level[3], result4);
-                calculateExpression(level[4], result5);
+                calculateExpression(Expression[0], result1);
+                calculateExpression(Expression[1], result2);
+                calculateExpression(Expression[2], result3);
+                calculateExpression(Expression[3], result4);
+                calculateExpression(Expression[4], result5);
 
 
 
@@ -54,7 +54,7 @@ public class Arithmetics extends HttpServlet {
                 myQuizTime= (int) quizTime(startTime,endTime);
 
                 //save details of quiz in database
-                Database.saveInDB(resultName, date, score(score, nrOfLevels), quizTime(endTime, startTime), level[0], level[1], level[2], level[3], level[4], insertedTrial.getJavaid());
+                Database.saveInDB(resultName, date, score(score, nrOfLevels), quizTime(endTime, startTime), Expression[0], Expression[1], Expression[2], Expression[3], Expression[4], insertedTrial.getJavaid());
 
                 Database.getFromDB();
                 Database.UpdateDB();

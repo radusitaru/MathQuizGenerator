@@ -8,9 +8,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>All Operations</title>
 </head>
 <body>
+<form action="http://localhost:8080/MathQuizFrontEnd_war_exploded/quizGeneration" method="POST">
+
+    <button type="submit" value="Start quiz!">Start quiz!</button>
+</form>
 
 </body>
+
+<div>
+    <form action="http://localhost:8080/MathQuizFrontEnd_war_exploded/FrontEndMath/Arithmetics.jsp" method="POST">
+
+        <button type="submit" value="Back">Back</button>
+    </form>
+
+
+</div>
 </html>

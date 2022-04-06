@@ -3,6 +3,7 @@ package FrontEnd;
 import BackEnd.BackendRanking;
 import BackEnd.Database;
 
+import javax.script.ScriptException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +21,20 @@ public class QuizGeneration extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
-        generateLevels();
+
+       int difficulty = Integer.parseInt(req.getParameter("difficulty"));
+
+
+        try {
+            Expression[0] = TwoOperatorExpression(difficulty, "+", "-");
+            Expression[1] = TwoOperatorExpression(difficulty, "+", "-");
+            Expression[2] = TwoOperatorExpression(difficulty, "+", "-");
+            Expression[3] = TwoOperatorExpression(difficulty, "+", "-");
+            Expression[4] = TwoOperatorExpression(difficulty, "+", "-");
+
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
 
         startTime = getTime();
 

@@ -1,5 +1,5 @@
 <%@ page import="java.util.Locale" %>
-<%@ page import="static BackEnd.BackendMain.generateTwoOpLevel" %>
+<%@ page import="static BackEnd.BackendMain.TwoOperatorExpression" %>
 <%@ page import="static BackEnd.BackendMain.*" %><%--
   Created by IntelliJ IDEA.
   User: radus
@@ -29,7 +29,7 @@
         <div>
             <h1 style="background-color:rgb(240, 240, 240);">
                 <b>Level 1:</b>
-                    <%=level[0]%>
+                    <%=Expression[0]%>
         </div>
         Answer: <input type="text" name="result1" id="result1">
         </h1>
@@ -38,7 +38,7 @@
 
             <h1 style="background-color:rgb(220, 220, 220);">
                 <b>Level 2:</b>
-                    <%=level[1]%>
+                    <%=Expression[1]%>
         </div>
         Answer: <input type="text" name="result2" id="result2"/>
         </h1>
@@ -47,7 +47,7 @@
 
             <h1 style="background-color:rgb(200, 200, 200);">
                 <b>Level 3:</b>
-                    <%=level[2]%>
+                    <%=Expression[2]%>
         </div>
         Answer: <input type="text" name="result3" id="result3"/>
         </h1>
@@ -56,7 +56,7 @@
 
             <h1 style="background-color:rgb(180, 180, 180);">
                 <b>Level 4:</b>
-                    <%=level[3]%>
+                    <%=Expression[3]%>
         </div>
         Answer: <input type="text" name="result4" id="result4"/>
         </h1>
@@ -65,7 +65,7 @@
 
             <h1 style="background-color:rgb(160, 160, 160);">
                 <b>Level 5:</b>
-                    <%=level[4]%>
+                    <%=Expression[4]%>
         </div>
         Answer: <input type="text" name="result5" id="result5"/>
         </h1>

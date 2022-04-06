@@ -6,7 +6,6 @@ import javax.script.ScriptException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Scanner;
 
 import static java.lang.Double.parseDouble;
 
@@ -45,7 +44,6 @@ public class BackendMain extends GenerateExpression {
         startTime = getTime();
 
 
-
         //get end time
         endTime = getTime();
 
@@ -67,11 +65,11 @@ public class BackendMain extends GenerateExpression {
     public static int score = 0;
     public static int nrOfLevels = 0;
 
-    static public String dbNames[]=new String[5];
+    static public String dbNames[] = new String[5];
 
     static ScriptEngineManager sem = new ScriptEngineManager();
 
-    public static String[] level = new String[5];
+    public static String[] Expression = new String[5];
 
     public static LocalDate date = LocalDate.now();
     public static LocalTime startTime;
@@ -100,13 +98,28 @@ public class BackendMain extends GenerateExpression {
 
     /**
      * --------------------------------------------------------------------------------
-     * Method for generating numbers with 2 different operators that give %2 = 0, meaning no rest.
+     * Method for generating an arithmetic expression with 2 different operators that give %2 = 0, meaning no rest.
      * --------------------------------------------------------------------------------
      */
-    public static String generateTwoOpLevel(int level, int nrLimit, String op1, String op2) throws ScriptException {
+    public static String TwoOperatorExpression(int level, String op1, String op2) throws ScriptException {
 
         System.out.println("--------------- Level " + level + "---------------");
         String result;
+        int nrLimit;
+
+        switch (level) {
+            case 1:
+                nrLimit = 10;
+                break;
+            case 2:
+                nrLimit = 20;
+                break;
+            case 3:
+                nrLimit = 40;
+            default:
+                nrLimit = 10;
+                break;
+        }
 
         boolean stop = false;
         do {
@@ -132,25 +145,6 @@ public class BackendMain extends GenerateExpression {
 
         return result;
     }
-
-        /**
-         * --------------------------------------------------------------------------------
-         * Method for activating the generation of levels
-         * --------------------------------------------------------------------------------
-         */
-        public static void generateLevels(){
-
-            try {
-                level[0] = generateTwoOpLevel(1, 10, "+", "-");
-                level[1] = generateTwoOpLevel(2, 10, "+", "-");
-                level[2] = generateTwoOpLevel(3, 10, "+", "-");
-                level[3] = generateTwoOpLevel(4, 10, "+", "-");
-                level[4] = generateTwoOpLevel(5, 10, "+", "-");
-            } catch (ScriptException e) {
-                e.printStackTrace();
-            }
-
-        }
 
     /**
      * --------------------------------------------------------------------------------
