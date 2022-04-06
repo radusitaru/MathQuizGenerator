@@ -5,7 +5,7 @@
 <%@ page import="static BackEnd.BackendMain.nrOfLevels" %>
 <%@ page import="static BackEnd.BackendMain.*" %>
 <%@ page import="static BackEnd.Database.*" %>
-<%@ page import="FrontEnd.QuizCalculation" %>
+<%@ page import="FrontEnd.Arithmetics" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

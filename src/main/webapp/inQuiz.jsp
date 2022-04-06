@@ -14,7 +14,7 @@
     <title>MATH QUIZ</title>
 
 
-    <form name="result" action="quizCalculation" method="POST">
+    <form name="result" action="Arithmetics" method="POST">
 
         <div>
             <h1 style="background-color:rgb(240, 200, 180);">

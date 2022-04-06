@@ -16,8 +16,8 @@ import java.io.IOException;
 import static BackEnd.BackendMain.*;
 
 
-@WebServlet("/quizCalculation")
-public class QuizCalculation extends HttpServlet {
+@WebServlet("/Arithmetics")
+public class Arithmetics extends HttpServlet {
 
     public static BackendRanking insertedTrial = new BackendRanking();
 
@@ -58,7 +58,7 @@ public class QuizCalculation extends HttpServlet {
 
                 Database.getFromDB();
                 Database.UpdateDB();
-                Database.calculateMyRank(QuizCalculation.insertedTrial.getJavaid());
+                Database.calculateMyRank(Arithmetics.insertedTrial.getJavaid());
 
                 RequestDispatcher rd = req.getRequestDispatcher("results.jsp");
                 try {
