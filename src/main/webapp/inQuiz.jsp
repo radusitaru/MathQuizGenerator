@@ -1,6 +1,6 @@
 <%@ page import="java.util.Locale" %>
-<%@ page import="static BackEnd.BackendMain.TwoOperatorExpression" %>
-<%@ page import="static BackEnd.BackendMain.*" %><%--
+<%@ page import="static Backend.Engine.TwoOperatorExpression" %>
+<%@ page import="static Backend.Engine.*" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 04.04.2022

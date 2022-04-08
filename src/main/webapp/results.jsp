@@ -1,10 +1,10 @@
-<%@ page import="BackEnd.Database" %>
-<%@ page import="static BackEnd.Database.scoresFromDB" %>
-<%@ page import="BackEnd.BackendRanking" %>
-<%@ page import="static BackEnd.BackendMain.score" %>
-<%@ page import="static BackEnd.BackendMain.nrOfLevels" %>
-<%@ page import="static BackEnd.BackendMain.*" %>
-<%@ page import="static BackEnd.Database.*" %>
+<%@ page import="Backend.Database" %>
+<%@ page import="static Backend.Database.scoresFromDB" %>
+<%@ page import="Backend.Database" %>
+<%@ page import="static Backend.Engine.score" %>
+<%@ page import="static Backend.Engine.nrOfLevels" %>
+<%@ page import="static Backend.Engine.*" %>
+<%@ page import="static Backend.Database.*" %>
 <%@ page import="FrontEnd.Arithmetics" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>

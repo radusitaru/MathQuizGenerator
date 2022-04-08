@@ -1,6 +1,6 @@
 package FrontEnd;
 
-import BackEnd.Database;
+import Backend.Database;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +19,7 @@ public class FrontEndRanking extends HttpServlet {
         try {
             PrintWriter pw = resp.getWriter();
             pw.println(Database.myRanking);
-            for(int i =0;i<Database.scoresFromDB.size();i++){
+            for(int i = 0; i< Database.scoresFromDB.size(); i++){
                 pw.println(Database.scoresFromDB.get(i));
             }
 
