@@ -88,14 +88,12 @@ public class Quiz {
         //2.7.1 Exceptions that will automatically make user re-introduce intake
 
         //2.7.1.2 No name of quiz inserted
-        if(userInput.get(0)==null);setRepeatIntake(false);
+        if(userInput.get(0)==null);setRepeatIntake(true);
 
         //2.7.1.3 Inserted fixed int & fixed double result
         if(userInput.get(4)==null && userInput.get(5)!=null);setRepeatIntake(true);
 
         //2.7.1.4 Inserted fixed result & range result
-        
-
         if(userInput.get(0)==null);setQuizName(userInput.get(0));
         if(userInput.get(1)!=null);setHighestNumber(Integer.parseInt(userInput.get(1)));
         if(userInput.get(2)!=null);setNumberOfExpressions(Integer.parseInt(userInput.get(2)));

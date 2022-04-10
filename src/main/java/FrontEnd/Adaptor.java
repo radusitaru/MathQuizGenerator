@@ -22,7 +22,8 @@ public class Adaptor extends HttpServlet {
     String highestNumber;
     String numberOfExpressions;
     String resultType;
-    String fixedResult;
+    String fixedIntResult;
+    String fixedDoubleResult;
     String resultMin;
     String resultMax;
 
@@ -48,9 +49,20 @@ public class Adaptor extends HttpServlet {
             highestNumber = req.getParameter("highestNumber");
             numberOfExpressions = req.getParameter("numberOfExpressions");
             resultType = req.getParameter("resultType");
-            fixedResult = req.getParameter("fixedResult");
+            fixedIntResult = req.getParameter("fixedResult");
+            fixedDoubleResult = req.getParameter("fixedResult");
             resultMin = req.getParameter("resultMin");
             resultMax = req.getParameter("resultMax");
+
+            //1.1.3 Collecting user input in a list
+            userInput.add(name);
+            userInput.add(highestNumber);
+            userInput.add(numberOfExpressions);
+            userInput.add(resultType);
+            userInput.add(fixedIntResult);
+            userInput.add(fixedDoubleResult);
+            userInput.add(resultMin);
+            userInput.add(resultMax);
 
         do {
             //creating object based on a constructor that takes a list of items
