@@ -1,4 +1,4 @@
-package Backend;
+package Servlets;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -6,9 +6,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static Backend.Play.setMyRanking;
+import static Servlets.Play.setMyRanking;
 
-public class Database {
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/Database")
+public class Database extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
 
     /**
      * --------------------------------------------------------------------------------
@@ -25,12 +37,12 @@ public class Database {
 
     //1.2 String variables
     private String name;
-    private String date;
+    private static String date;
     private String javaid; //This variable is used for extracting specificic information from database
     static public String myRanking; //Position of current quiz in the ranking
 
     //1.3 Lists
-    static public List<Database> scoresFromDB = new ArrayList<>();
+    static public List<Play> scoresFromDB = new ArrayList<>();
 
     /**
      * --------------------------------------------------------------------------------
@@ -47,7 +59,7 @@ public class Database {
         this.score = score;
         this.time = time;
         this.name = name;
-        this.date = Engine.date.toString();
+        this.date = Play.date.toString();
         this.position=position;
         this.DBid=DBid;
         this.quizType=quizType;

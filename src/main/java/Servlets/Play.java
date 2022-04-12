@@ -1,10 +1,19 @@
-package Backend;
+package Servlets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class Play {
+@WebServlet("/Play")
+public class Play extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
 
     /**
      * --------------------------------------------------------------------------------
@@ -20,9 +29,9 @@ public class Play {
 
     //1.2 String variables
     private String name;
-    private String date;
+    private static String date;
     private String javaid; //This variable is used for extracting specificic information from database
-    private String quizType;
+    public String quizType;
     static public String myRanking; //Position of current quiz in the ranking
 
     //1.3 Lists
@@ -44,7 +53,7 @@ public class Play {
         this.score = score;
         this.time = time;
         this.name = name;
-        this.date = Engine.date.toString();
+        this.date = Play.date.toString();
         this.position=position;
         this.DBid=DBid;
         this.quizType=quizType;
@@ -77,7 +86,7 @@ public class Play {
     public String getJavaid() {
         return this.javaid;
     }
-    public void setJavaid(String name) {this.javaid = String.valueOf(Engine.randomGenerator.nextInt(22222222)).concat(name).concat(Engine.date.toString());}
+    public void setJavaid(String name) {this.javaid = String.valueOf(Engine.randomGenerator.nextInt(22222222)).concat(name).concat(Play.date.toString());}
     public String getDate() {
         return date;
     }
@@ -115,7 +124,8 @@ public class Play {
         this.name = name;
     }
     public static String getMyRanking() {return myRanking;}
-    public static void setMyRanking(String myRanking) {Database.myRanking = myRanking;}
+    public static void setMyRanking(String myRanking) {
+        Play.myRanking = myRanking;}
     public String getQuizType() {
         return quizType;
     }

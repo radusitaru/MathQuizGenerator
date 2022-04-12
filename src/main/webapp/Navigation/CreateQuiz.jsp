@@ -1,4 +1,4 @@
-<%@ page import="FrontEnd.Adaptor" %><%--
+<%@ page import="Servlets.Adaptor" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 12.04.2022
@@ -32,7 +32,7 @@ Only select highest number and number of expressions
 <div></div>
 Select the fixed result for the expressions in the quiz, the highest number and number of expressions
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuiz_war_exploded/QuizTypes/fixedResultQuiz.html"> Fixed
+<button onclick=document.location="http://localhost:8080/MathQuiz_war_exploded/QuizTypes/fixedResultQuiz.jsp"> Fixed
   result quiz
 </button>
 <br>

@@ -1,4 +1,4 @@
-<%@ page import="FrontEnd.Adaptor" %>
+<%@ page import="Servlets.Adaptor" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -10,16 +10,17 @@
         <br>
     </div>
     <form name="submit" action="http://localhost:8080/MathQuiz_war_exploded/Adaptor" method="POST">
-        quizName*: <input type="text" name="quizName" id="quizName"/> (default=restart intake) </br>
-        highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/> (default=10) </br>
-        numberOfExpressions*: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> (default=5) </br>
+        quizName*: <input type="text" name="quizName" id="quizName"/> </br>
+        highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/> </br>
+        numberOfExpressions*: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
         resultType*:
         <input type="radio" id="Integer1" name="Integer1" value="Integer1">
         <label for="Integer1">int</label>
         <input type="radio" id="Double1" name="Double1" value="Double1">
         <label for="Double1">double</label>
-        resultMin: <input type="text" name="resultMin" id="resultMin"/> (default=5) </br>
-        resultMax: <input type="text" name="resultMax" id="resultMax"/> (default=10) </br>
+        <br>
+        resultMin: <input type="text" name="resultMin" id="resultMin"/> </br>
+        resultMax: <input type="text" name="resultMax" id="resultMax"/> </br>
         <br>
         <br>
         <input type="hidden" id="quizType" name="quizType" value="resultRangeQuiz">
@@ -32,6 +33,7 @@
 
     <br>
     <br><b>Back </b>
+    <br>
     <button onclick="document.location='http://localhost:8080/MathQuiz_war_exploded/Navigation/CreateQuiz.jsp'"> Back </button>
     <br>
 

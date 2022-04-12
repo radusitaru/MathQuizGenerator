@@ -1,4 +1,4 @@
-<%@ page import="FrontEnd.Adaptor" %>
+<%@ page import="Servlets.Adaptor" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.io.IOException" %><%--
   Created by IntelliJ IDEA.
@@ -19,9 +19,9 @@
         <br>
     </div>
     <form name="submit" action="http://localhost:8080/MathQuiz_war_exploded/Adaptor" method="POST">
-        quizName*: <input type="text" name="quizName" id="quizName"/> (default=restart intake) </br>
-        highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/> (default=10) </br>
-        numberOfExpressions*: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> (default=5) </br>
+        quizName*: <input type="text" name="quizName" id="quizName"/> </br>
+        highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/> </br>
+        numberOfExpressions*: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
         resultType*:
         <input type="radio" id="Integer1" name="Integer1" value="Integer1">
         <label for="Integer1">int</label>
@@ -38,7 +38,8 @@
     <%=Adaptor.errorsList.toString()%>
 
     <br>
-    <br><b>Back </b>
+    <br><b>Back to menu </b>
+    <br>
     <button onclick="document.location='http://localhost:8080/MathQuiz_war_exploded/Navigation/CreateQuiz.jsp'"> Back </button>
     <br>
 </head>
