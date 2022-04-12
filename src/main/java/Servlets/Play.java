@@ -29,7 +29,7 @@ public class Play extends HttpServlet {
 
     //1.2 String variables
     private String name;
-    private static String date;
+    public static String date;
     private String javaid; //This variable is used for extracting specificic information from database
     public String quizType;
     static public String myRanking; //Position of current quiz in the ranking
