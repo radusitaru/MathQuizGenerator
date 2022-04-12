@@ -27,7 +27,7 @@ public class Adaptor extends HttpServlet {
     int highestNumber;
     int numberOfExpressions;
     int fixedIntResult;
-    int errorCounter = 1;
+    public static int errorCounter = 1;
     double fixedDoubleResult;
     double resultMin;
     double resultMax;
@@ -185,9 +185,15 @@ public class Adaptor extends HttpServlet {
         return errorsList;
     }
 
+    static public void resetErrorList(){
+        errorsList.clear();
+        errorCounter = 1;
+    }
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
+        resetErrorList();
 
         //3. Fetching quiz type
         quizType = req.getParameter("quizType");
@@ -196,11 +202,12 @@ public class Adaptor extends HttpServlet {
         //4. Determining quiz type
         switch (quizType) {
 
+
+
             //4.1 Verifying random quiz input
             case "randomQuiz":
 
-                errorsList.clear();
-                errorCounter = 1;
+                resetErrorList();
 
                 //4.1.1 Verifying quiz name input - if is empty, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
@@ -255,8 +262,7 @@ public class Adaptor extends HttpServlet {
             //4.2 Verifying resultRangeQuiz
             case "resultRangeQuiz":
 
-                errorsList.clear();
-                errorCounter = 1;
+                resetErrorList();
 
                 //4.1.1 Verifying quiz name input - if is empty, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {

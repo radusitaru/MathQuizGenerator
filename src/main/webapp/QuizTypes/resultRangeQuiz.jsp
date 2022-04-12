@@ -30,6 +30,11 @@
 
     <%=Adaptor.errorsList.toString()%>
 
+    <br>
+    <br><b>Back </b>
+    <button onclick="document.location='http://localhost:8080/MathQuiz_war_exploded/Navigation/CreateQuiz.jsp'"> Back </button>
+    <br>
+
 </head>
 <body>
 
