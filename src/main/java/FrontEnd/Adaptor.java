@@ -27,6 +27,7 @@ public class Adaptor extends HttpServlet {
     int highestNumber;
     int numberOfExpressions;
     int fixedIntResult;
+    int errorCounter = 1;
     double fixedDoubleResult;
     double resultMin;
     double resultMax;
@@ -48,18 +49,17 @@ public class Adaptor extends HttpServlet {
     String fixedResult;
 
     //1.3 Lists
-    public static List<String> errorsList =new ArrayList<>();
+    public static List<String> errorsList = new ArrayList<>();
 
     //1.4 Methods
 
     //1.4.1 Verifying user input
     public static List<String> checkInput(String userInput) {
 
-        //2.12.1 Method variables
+        //1.4.2 Method variables
         int dotCounter = 0;
         int firstChar = 0;
         int nextChar = 1;
-        int errorCounter = 1;
         boolean isDotFirst = false;
         boolean isDotLast = false;
         boolean isMultipleDots = false;
@@ -67,40 +67,40 @@ public class Adaptor extends HttpServlet {
         boolean isWrongInput = false;
         boolean isEmptyInput = true;
 
-        //2.12.2 Method lists
+        //1.4.3 Method lists
         List<Integer> wrongCharPosition = new ArrayList<>();
         List<String> wrongChar = new ArrayList<>();
         List<Integer> wrongDotPosition = new ArrayList<>();
         List<String> errorsList = new ArrayList<>();
 
-        //2.12.3 Clearing errorsList
+        //1.4.4 Clearing errorsList
         errorsList.clear();
 
-        //2.12.4 Method calls & objects
+        //1.4.5 Method calls & objects
         Pattern lettersPattern = Pattern.compile("\\D", Pattern.CASE_INSENSITIVE);
         Matcher matcher;
 
-        //2.12.5 Checking if input is empty - continuing only if input is not empty
+        //1.4.6 Checking if input is empty - continuing only if input is not empty
         if (!Objects.equals(userInput, "")) {
             isEmptyInput = false;
 
 
-            //2.12.6 Determining whether input is non-digit & non-dot
+            //1.4.7 Determining whether input is non-digit & non-dot
             for (firstChar = 0; firstChar < userInput.length(); firstChar++, nextChar++) {
 
-                //2.12.7 Initializing matcher & isStringChar boolean
+                //1.4.8 Initializing matcher & isStringChar boolean
                 matcher = lettersPattern.matcher(userInput.substring(firstChar, nextChar));
                 isStringChar = matcher.find();
 
 
-                //2.12.8 If input is anything besides digits or dots, mark as wrong
+                //1.4.9 If input is anything besides digits or dots, mark as wrong
                 if (isStringChar && !userInput.substring(firstChar, nextChar).equals(".")) {
                     isWrongInput = true;
                     wrongChar.add(userInput.substring(firstChar, nextChar));
                     wrongCharPosition.add(firstChar + 1);
                 }
 
-                //2.12.9 Counting dots, determining whether current char is a multiple dot. If yes, save its position in String
+                //1.4.10 Counting dots, determining whether current char is a multiple dot. If yes, save its position in String
                 if (userInput.substring(firstChar, nextChar).equals(".")) {
                     dotCounter++;
                     if (dotCounter > 1) {
@@ -111,13 +111,13 @@ public class Adaptor extends HttpServlet {
             }
 
 
-            //2.12.10 Checking if dot is first or last
+            //1.4.11 Checking if dot is first or last
             if (userInput.substring(0, 1).equalsIgnoreCase(".")) isDotFirst = true;
             else if (userInput.substring(userInput.length() - 1, userInput.length()).equalsIgnoreCase("."))
                 isDotLast = true;
 
         }
-        //2.12.11 Determining issues
+        //1.4.12 Determining issues
         if (isMultipleDots) {
             errorsList.add("Multiple dots");
         }
@@ -189,52 +189,59 @@ public class Adaptor extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
 
-
-        //2. Fetching quiz type
+        //3. Fetching quiz type
         quizType = req.getParameter("quizType");
 
 
-        //3. Determining quiz type
-        switch(quizType){
+        //4. Determining quiz type
+        switch (quizType) {
 
-            //3.1 Verifying random quiz input
+            //4.1 Verifying random quiz input
             case "randomQuiz":
 
-                //3.1.1 Verifying quiz name input - if is empty, repeat intake and save error message
-                for(int i = 0;i<checkInput(req.getParameter("quizName")).size();i++){
-                    if(checkInput(req.getParameter("quizName")).get(i).equals("Empty input")){
-                        errorsList.add("Error on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake=true;
+                errorsList.clear();
+                errorCounter = 1;
+
+                //4.1.1 Verifying quiz name input - if is empty, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
+                    if (checkInput(req.getParameter("quizName")).get(i).equals("Empty input")) {
+                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
                     }
                 }
 
-                //3.1.2 Verifying highest number input - if is empty or non-digit, repeat intake and save error message
-                for(int i = 0;i<checkInput(req.getParameter("highestNumber")).size();i++){
-                    if(checkInput(req.getParameter("highestNumber")).get(i).equals("Non-digit or non-dot")
-                    ||
-                            checkInput(req.getParameter("highestNumber")).get(i).equals("Empty input")
-                    )
-                    {
-                        errorsList.add("Error on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake=true;
+                //4.1.2 Verifying highest number input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("highestNumber")).size(); i++) {
+                    if (!checkInput(req.getParameter("highestNumber")).get(i).equals("Good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
                     }
                 }
 
-
-                //3.1.3 Printing error for user
-                if(repeatIntake) {
-                    PrintWriter pw = null;
-                    try {
-                        pw = resp.getWriter();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                //4.1.3 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
+                    if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("Good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
                     }
+                }
 
-                    for (int i = 0; i < errorsList.size(); i++) {
-                        pw.println(errorsList.get(i));
-                    }
-                    pw.close();
-                    RequestDispatcher rd=req.getRequestDispatcher("randomQuiz.jsp");
+                //4.1.4 Verifying radio box for int/double
+                if (req.getParameter("Integer1") == null && req.getParameter("Double1") == null) {
+                    errorsList.add("Error #" + errorCounter + " on result type: " + "Empty input");
+                    repeatIntake = true;
+                    errorCounter++;
+                }
+
+
+                //4.1.5 Redirect back to randomQuiz of input is invalid
+                if (repeatIntake) {
+                    RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
                     try {
                         rd.forward(req, resp);
                     } catch (ServletException e) {
@@ -243,11 +250,82 @@ public class Adaptor extends HttpServlet {
                         e.printStackTrace();
                     }
                 }
-
-
                 break;
 
+            //4.2 Verifying resultRangeQuiz
             case "resultRangeQuiz":
+
+                errorsList.clear();
+                errorCounter = 1;
+
+                //4.1.1 Verifying quiz name input - if is empty, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
+                    if (checkInput(req.getParameter("quizName")).get(i).equals("Empty input")) {
+                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                }
+
+                //4.1.2 Verifying highest number input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("highestNumber")).size(); i++) {
+                    if (!checkInput(req.getParameter("highestNumber")).get(i).equals("Good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                }
+
+                //4.1.3 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
+                    if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("Good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                }
+
+                //4.1.4 Verifying radio box for int/double
+                if (req.getParameter("Integer1") == null && req.getParameter("Double1") == null) {
+                    errorsList.add("Error #" + errorCounter + " on result type: " + "Empty input");
+                    repeatIntake = true;
+                    errorCounter++;
+                }
+
+                //4.1.5 Verifying minimum result range
+                for (int i = 0; i < checkInput(req.getParameter("resultMin")).size(); i++) {
+                    if (!checkInput(req.getParameter("resultMin")).get(i).equals("Good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(req.getParameter("resultMin")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                }
+
+                //4.1.6 Verifying maximum result range
+                for (int i = 0; i < checkInput(req.getParameter("resultMax")).size(); i++) {
+                    if (!checkInput(req.getParameter("resultMax")).get(i).equals("Good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(req.getParameter("resultMax")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+
+
+                    //4.1.7 Redirect back to randomQuiz if input is invalid
+                    if (repeatIntake) {
+                        RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
+                        try {
+                            rd.forward(req, resp);
+                        } catch (ServletException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 break;
 
             case "fixedResultQuiz":

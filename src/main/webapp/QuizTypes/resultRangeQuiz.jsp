@@ -1,21 +1,12 @@
 <%@ page import="FrontEnd.Adaptor" %>
-<%@ page import="java.io.PrintWriter" %>
-<%@ page import="java.io.IOException" %><%--
-  Created by IntelliJ IDEA.
-  User: radus
-  Date: 12.04.2022
-  Time: 14:22
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="UTF-8">
 
-    <title>Random quiz</title>
+    <title>Result range quiz</title>
     <div>
 
-        <b>Random quiz</b><br>
+        <b>Result range quiz</b><br>
         <br>
     </div>
     <form name="submit" action="http://localhost:8080/MathQuiz_war_exploded/Adaptor" method="POST">
@@ -27,9 +18,11 @@
         <label for="Integer1">int</label>
         <input type="radio" id="Double1" name="Double1" value="Double1">
         <label for="Double1">double</label>
+        resultMin: <input type="text" name="resultMin" id="resultMin"/> (default=5) </br>
+        resultMax: <input type="text" name="resultMax" id="resultMax"/> (default=10) </br>
         <br>
         <br>
-        <input type="hidden" id="quizType" name="quizType" value="randomQuiz">
+        <input type="hidden" id="quizType" name="quizType" value="resultRangeQuiz">
         <input type="submit" value="Submit"/>
     </form>
 
