@@ -8,7 +8,10 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Engine {
@@ -401,20 +404,12 @@ public class Engine {
     public static long quizTime(LocalTime endTime, LocalTime startTime) {
         System.out.println("You spent " + ChronoUnit.SECONDS.between(endTime, startTime) + " seconds on completing the quiz");
         return ChronoUnit.SECONDS.between(endTime, startTime);
+
+
     }
 
     public static void main(String[] args) {
 
-
-        generateAllExpressions();
-        for (String allExpression : allExpressions) {
-            System.out.println(allExpression);
-            try {
-                System.out.println(calculateExpression(allExpression));
-            } catch (ScriptException e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 }

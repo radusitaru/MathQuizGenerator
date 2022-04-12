@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Fixed result quiz</title>
+    <div>
+
+        <b>Fixed result quiz</b>
+        <div> INFO: If 0 is inserted = restart intake</div>
+        <br>
+
+    </div>
+    <form name="submit" action="Adaptor" method="POST">
+        quizName: <input type="text" name="quizName" id="quizName"/> (default=restart intake) </br>
+        highestNumber: <input type="text" name="highestNumber" id="highestNumber"/> (default=10) </br>
+        numberOfExpressions: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> (default=5) </br>
+        fixedResult: <input type="text" name="fixedResult" id="fixedResult"/> (default=10) </br>
+        <input type="hidden" id="quizType" name="quizType" value="fixedResultQuiz">
+        <br>
+        <input type="submit" value="Submit"/>
+    </form>
+
+</head>
+<body>
+
+</body>
+</html>

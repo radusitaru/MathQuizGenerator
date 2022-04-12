@@ -1,6 +1,7 @@
 package Backend;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Quiz {
 
@@ -34,11 +35,6 @@ public class Quiz {
      * --------------------------------------------------------------------------------
      */
 
-    //2.1 Quiz type: "name"
-    public Quiz(String quizName) {
-        setQuizName(quizName);
-        setQuizType("name");
-    }
 
     //2.2 Quiz type: "name+ResultType"
     Quiz(String quizName, String type) {
@@ -84,24 +80,27 @@ public class Quiz {
     }
 
     //2.7 Constructor for collecting input
-    public Quiz(List<String> userInput) {
+    public Quiz(String quizName, int highestNumber, int numberOfExpressions, String resultType,int fixedIntResult,double fixedDoubleResult,double resultMin,double resultMax) {
         //2.7.1 Exceptions that will automatically make user re-introduce intake
-
-        //2.7.1.2 No name of quiz inserted
-        if(userInput.get(0)==null);setRepeatIntake(true);
-
-        //2.7.1.3 Inserted fixed int & fixed double result
-        if(userInput.get(4)==null && userInput.get(5)!=null);setRepeatIntake(true);
-
-        //2.7.1.4 Inserted fixed result & range result
-        if(userInput.get(0)==null);setQuizName(userInput.get(0));
-        if(userInput.get(1)!=null);setHighestNumber(Integer.parseInt(userInput.get(1)));
-        if(userInput.get(2)!=null);setNumberOfExpressions(Integer.parseInt(userInput.get(2)));
-        if(userInput.get(3)!=null);setResultType(userInput.get(3));
-        if(userInput.get(4)!=null);setFixedIntResult(Integer.parseInt(userInput.get(4)));
-        if(userInput.get(5)!=null);setFixedDoubleResult(Double.parseDouble(userInput.get(5)));
-        if(userInput.get(6)!=null);setResultMin(Integer.parseInt(userInput.get(6)));
-        if(userInput.get(7)!=null);setResultMax(Integer.parseInt(userInput.get(7)));
+//
+//        //2.7.1.2 No name of quiz inserted
+//        if(Objects.equals(quizName, ""))setRepeatIntake(true);
+//
+//        //2.7.1.3 Inserted fixed int & fixed double result
+//        if(fixedIntResult!=0 && fixedDoubleResult!=0)setRepeatIntake(true);
+//
+//        //2.7.1.4 Inserted fixed result & range result
+//        if((fixedIntResult!=0 || fixedDoubleResult!=0) && (resultMin!=0|| resultMax!=0))setRepeatIntake(true);
+//
+//
+//        if(!Objects.equals(quizName, ""))setQuizName(quizName);
+//        if(highestNumber!=0)setHighestNumber(highestNumber);
+//        if(numberOfExpressions!=0)setNumberOfExpressions(numberOfExpressions);
+//        if(!Objects.equals(resultType, ""))setResultType(resultType);
+//        if(fixedIntResult!=0)setFixedIntResult(fixedIntResult);
+//        if(fixedDoubleResult!=0)setFixedDoubleResult(fixedDoubleResult);
+//        if(resultMin!=0)setResultMin(resultMin);
+//        if(resultMax!=0)setResultMax(resultMax);
 
     }
 
