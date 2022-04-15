@@ -13,6 +13,19 @@
         quizName*: <input type="text" name="quizName" id="quizName"/> </br>
         highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/>  </br>
         numberOfExpressions*: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/>  </br>
+        operators*:<br>
+        add:
+        <input type="checkbox" id="add" name="add" value="add">
+        <label for="add"> +</label><br>
+        subtract:
+        <input type="checkbox" id="subtract" name="subtract" value="subtract">
+        <label for="subtract"> - </label><br>
+        multiply:
+        <input type="checkbox" id="multiply" name="multiply" value="multiply">
+        <label for="multiply"> * </label><br>
+        divide:
+        <input type="checkbox" id="divide" name="divide" value="divide">
+        <label for="divide"> / </label><br>
         fixedResult*: <input type="text" name="fixedResult" id="fixedResult"/>
         <br>
         <br>

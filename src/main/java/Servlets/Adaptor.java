@@ -27,13 +27,13 @@ public class Adaptor extends HttpServlet {
     //1.2 String variables
     String quizType;
     LocalDate test = LocalDate.now();
+    String resultType;
 
     //1.3 Lists
     public static List<String> errorsList = new ArrayList<>();
     public static List<Integer> errorPositionInList = new ArrayList<>();
-    public static List<String> randomQuizzes = new ArrayList<>();
-    public static List<String> fixedResultQuizzes = new ArrayList<>();
-    public static List<String> resultRangeQuizzes = new ArrayList<>();
+    public static List<Quiz> quizzes = new ArrayList<>();
+    public static List<String> inputOperators = new ArrayList<>();
 
 
     //1.4 Methods
@@ -139,6 +139,11 @@ public class Adaptor extends HttpServlet {
         errorCounter = 1;
     }
 
+
+    static public void resetQuizzesList() {
+        quizzes.clear();
+    }
+
     static public void getErrorPosition() {
         for (int i = 0; i < errorsList.size(); i++) {
             errorPositionInList.add(errorsList.get(i).length());
@@ -150,18 +155,22 @@ public class Adaptor extends HttpServlet {
 
         resetErrorList();
 
+
         //3. Fetching quiz type
         quizType = req.getParameter("quizType");
-
+        System.out.println(quizType);
 
         //4. Determining quiz type
         switch (quizType) {
-
 
             //4.1 Verifying random quiz input
             case "randomQuiz":
 
                 resetErrorList();
+
+                //Collecting result type
+                if (req.getParameter("Integer1") == null) resultType = req.getParameter("Double1");
+                else resultType = req.getParameter("Integer1");
 
                 //4.1.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
@@ -170,7 +179,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("quizName")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("quizName")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -186,7 +195,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("highestNumber")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -202,7 +211,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " number if expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -217,8 +226,26 @@ public class Adaptor extends HttpServlet {
                     errorCounter++;
                 }
 
+                //4.1.5 Verifying operators input
+                if (req.getParameter("add") == null
+                        && req.getParameter("subtract") == null
+                        && req.getParameter("multiply") == null
+                        && req.getParameter("divide") == null) {
+                    errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+                    repeatIntake = true;
+                    errorCounter++;
+                }
 
-                //4.1.5 Redirect back to randomQuiz of input is invalid
+                //4.1.6 Collecting operators input
+                if (!repeatIntake) {
+                    if (req.getParameter("add") != null) inputOperators.add("+");
+                    if (req.getParameter("subtract") != null) inputOperators.add("-");
+                    if (req.getParameter("multiply") != null) inputOperators.add("*");
+                    if (req.getParameter("divide") != null) inputOperators.add("/");
+                }
+
+
+                //4.1.7 Redirect back to randomQuiz of input is invalid
                 if (repeatIntake) {
                     RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
                     try {
@@ -230,20 +257,25 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.1.6 Create quiz object if user input contains no errors
-                if(!repeatIntake){
+                //4.1.8 Create quiz object if user input contains no errors
+                if (!repeatIntake) {
                     Quiz randomQuiz = new Quiz(req.getParameter("quizName"),
-                            req.getParameter("highestNumber"),
-                            req.getParameter("nrOfExpressions")
-                            ,req.getParameter("resultType"));
+                            inputOperators,
+                            Integer.parseInt(req.getParameter("highestNumber")),
+                            Integer.parseInt(req.getParameter("numberOfExpressions")),
+                            resultType);
+                    quizzes.add(randomQuiz);
                 }
-
                 break;
 
             //4.2 Verifying resultRangeQuiz
             case "resultRangeQuiz":
 
                 resetErrorList();
+
+                //Collecting result type
+                if (req.getParameter("Integer1") == null) resultType = req.getParameter("Double1");
+                else resultType = req.getParameter("Integer1");
 
                 //4.2.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
@@ -252,7 +284,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("quizName")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("quizName")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -270,7 +302,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("highestNumber")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -286,7 +318,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -310,11 +342,11 @@ public class Adaptor extends HttpServlet {
                         errorCounter++;
                     }
 
-                if(checkInput(req.getParameter("resultMin")).get(i).equals("too long")) {
-                    errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(req.getParameter("resultMin")).get(i));
-                    repeatIntake = true;
-                    errorCounter++;
-                }
+                    if (checkInput(req.getParameter("resultMin")).get(i).equals("too long")) {
+                        errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(req.getParameter("resultMin")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
                 }
 
                 //4.2.6 Verifying maximum result range
@@ -325,15 +357,33 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("resultMax")).get(i).equals("too long")) {
+                    if (checkInput(req.getParameter("resultMax")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(req.getParameter("resultMax")).get(i));
                         repeatIntake = true;
                         errorCounter++;
 
                     }
 
+                    //4.2.7 Verifying if input is an operator, or if input is empty
+                    if (req.getParameter("add") == null
+                            && req.getParameter("subtract") == null
+                            && req.getParameter("multiply") == null
+                            && req.getParameter("divide") == null) {
+                        errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
 
-                    //4.2.7 Redirect back to randomQuiz if input is invalid
+                    //4.2.8 Collecting operators input
+                    if (!repeatIntake) {
+                        if (req.getParameter("add") != null) inputOperators.add("+");
+                        if (req.getParameter("subtract") != null) inputOperators.add("-");
+                        if (req.getParameter("multiply") != null) inputOperators.add("*");
+                        if (req.getParameter("divide") != null) inputOperators.add("/");
+                    }
+
+
+                    //4.2.9 Redirect back to randomQuiz if input is invalid
                     if (repeatIntake) {
                         RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
                         try {
@@ -345,15 +395,17 @@ public class Adaptor extends HttpServlet {
                         }
                     }
                 }
-                //4.2.8 Create quiz object if user input contains no errors
-                if(!repeatIntake){
+                //4.2.10 Create quiz object if user input contains no errors
+                if (!repeatIntake) {
                     Quiz resultRangeQuiz = new Quiz(req.getParameter("quizName"),
-                            req.getParameter("highestNumber"),
-                            req.getParameter("nrOfExpressions"),
-                            req.getParameter("resultType"),
+                            inputOperators,
+                            Integer.parseInt(req.getParameter("highestNumber")),
+                            Integer.parseInt(req.getParameter("numberOfExpressions")),
+                            resultType,
                             Double.parseDouble((req.getParameter("resultMin"))),
                             Double.parseDouble(req.getParameter("resultMax")));
                     System.out.println(resultRangeQuiz.getQuizName());
+                    quizzes.add(resultRangeQuiz);
                 }
                 break;
 
@@ -369,7 +421,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("quizName")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("quizName")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on quizName: " + checkInput(req.getParameter("quizName")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -385,7 +437,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("highestNumber")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -402,7 +454,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -419,7 +471,7 @@ public class Adaptor extends HttpServlet {
                         repeatIntake = true;
                         errorCounter++;
                     }
-                    if(checkInput(req.getParameter("fixedResult")).get(i).equals("too long")){
+                    if (checkInput(req.getParameter("fixedResult")).get(i).equals("too long")) {
                         errorsList.add("Error #" + errorCounter + " fixed result: " + checkInput(req.getParameter("fixedResult")).get(i));
                         repeatIntake = true;
                         errorCounter++;
@@ -439,20 +491,52 @@ public class Adaptor extends HttpServlet {
                         e.printStackTrace();
                     }
                 }
-                //4.3.6 Create quiz object if user input contains no errors
-                if(!repeatIntake){
+
+                //4.3.6 Collecting operators input
+                if (!repeatIntake) {
+                    if (req.getParameter("add") != null) inputOperators.add("+");
+                    if (req.getParameter("subtract") != null) inputOperators.add("-");
+                    if (req.getParameter("multiply") != null) inputOperators.add("*");
+                    if (req.getParameter("divide") != null) inputOperators.add("/");
+                }
+
+                //4.3.6 Verifying operators input
+                if (req.getParameter("add") == null
+                        && req.getParameter("subtract") == null
+                        && req.getParameter("multiply") == null
+                        && req.getParameter("divide") == null) {
+                    errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+                    repeatIntake = true;
+                    errorCounter++;
+                }
+
+                //4.3.7 Create quiz object if user input contains no errors
+                if (!repeatIntake) {
                     Quiz fixedResultQuiz = new Quiz(req.getParameter("quizName"),
-                            req.getParameter("highestNumber"),
-                            req.getParameter("nrOfExpressions"),
-                            req.getParameter("fixedResult"));
-                    System.out.println(fixedResultQuiz.getQuizName());
+                            inputOperators,
+                            Integer.parseInt(req.getParameter("highestNumber")),
+                            Integer.parseInt(req.getParameter("numberOfExpressions")),
+                            Double.parseDouble(req.getParameter("fixedResult")));
+                    quizzes.add(fixedResultQuiz);
                 }
                 break;
+
             default:
                 break;
         }
+
         getErrorPosition();
 
-    }
 
+        RequestDispatcher rd = req.getRequestDispatcher("/Generator");
+        try {
+            rd.forward(req, resp);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+
+        }
+    }
 }

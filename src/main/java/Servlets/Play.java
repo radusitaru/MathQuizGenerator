@@ -86,7 +86,7 @@ public class Play extends HttpServlet {
     public String getJavaid() {
         return this.javaid;
     }
-    public void setJavaid(String name) {this.javaid = String.valueOf(Engine.randomGenerator.nextInt(22222222)).concat(name).concat(Play.date.toString());}
+    public void setJavaid(String name) {this.javaid = String.valueOf(Generator.randomGenerator.nextInt(22222222)).concat(name).concat(Play.date.toString());}
     public String getDate() {
         return date;
     }
