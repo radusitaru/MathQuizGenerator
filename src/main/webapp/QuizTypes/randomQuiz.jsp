@@ -21,6 +21,7 @@
     <form name="submit" action="http://localhost:8080/MathQuiz_war_exploded/Adaptor" method="POST">
         quizName*: <input type="text" name="quizName" id="quizName"/> </br>
         highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/> </br>
+        numbersInExpression*: <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>
         numberOfExpressions*: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
         operators*:<br>
         add:

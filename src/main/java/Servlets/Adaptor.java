@@ -165,7 +165,7 @@ public class Adaptor extends HttpServlet {
 
             //4.1 Verifying random quiz input
             case "randomQuiz":
-
+                repeatIntake = false;
                 resetErrorList();
 
                 //Collecting result type
@@ -203,7 +203,23 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.1.3 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
+                //4.1.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("numbersInExpression")).size(); i++) {
+                    if (!checkInput(req.getParameter("numbersInExpression")).get(i).equals("good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                    if (checkInput(req.getParameter("numbersInExpression")).get(i).equals("too long")) {
+                        errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+
+                    }
+                }
+
+                //4.1.4 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
                     if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("good input")
                     ) {
@@ -212,21 +228,21 @@ public class Adaptor extends HttpServlet {
                         errorCounter++;
                     }
                     if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " number if expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
+                        errorsList.add("Error #" + errorCounter + " number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
                         repeatIntake = true;
                         errorCounter++;
 
                     }
                 }
 
-                //4.1.4 Verifying radio box for int/double
+                //4.1.5 Verifying radio box for int/double
                 if (req.getParameter("Integer1") == null && req.getParameter("Double1") == null) {
                     errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
                     repeatIntake = true;
                     errorCounter++;
                 }
 
-                //4.1.5 Verifying operators input
+                //4.1.6 Verifying operators input
                 if (req.getParameter("add") == null
                         && req.getParameter("subtract") == null
                         && req.getParameter("multiply") == null
@@ -236,7 +252,7 @@ public class Adaptor extends HttpServlet {
                     errorCounter++;
                 }
 
-                //4.1.6 Collecting operators input
+                //4.1.7 Collecting operators input
                 if (!repeatIntake) {
                     if (req.getParameter("add") != null) inputOperators.add("+");
                     if (req.getParameter("subtract") != null) inputOperators.add("-");
@@ -244,8 +260,25 @@ public class Adaptor extends HttpServlet {
                     if (req.getParameter("divide") != null) inputOperators.add("/");
                 }
 
+                //4.1.8 Create quiz object if user input contains no errors
+                if (!repeatIntake) {
+                    Quiz randomQuiz = new Quiz(req.getParameter("quizName"),
+                            inputOperators,
+                            Integer.parseInt(req.getParameter("highestNumber")),
+                            Integer.parseInt(req.getParameter("numbersInExpression")),
+                            Integer.parseInt(req.getParameter("numberOfExpressions")),
+                            resultType);
+                    quizzes.add(randomQuiz);
+                }
 
-                //4.1.7 Redirect back to randomQuiz of input is invalid
+                //4.1.9 Check if quiz exists
+                System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
+                if(Database.checkIfQuizExists(quizzes.get(0))){
+                    repeatIntake=true;
+                    errorsList.add(Database.errorList.toString());
+                }
+
+                //4.1.9 Redirect back to randomQuiz of input is invalid
                 if (repeatIntake) {
                     RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
                     try {
@@ -257,20 +290,12 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.1.8 Create quiz object if user input contains no errors
-                if (!repeatIntake) {
-                    Quiz randomQuiz = new Quiz(req.getParameter("quizName"),
-                            inputOperators,
-                            Integer.parseInt(req.getParameter("highestNumber")),
-                            Integer.parseInt(req.getParameter("numberOfExpressions")),
-                            resultType);
-                    quizzes.add(randomQuiz);
-                }
+
                 break;
 
             //4.2 Verifying resultRangeQuiz
             case "resultRangeQuiz":
-
+                repeatIntake = false;
                 resetErrorList();
 
                 //Collecting result type
@@ -310,7 +335,23 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.2.3 Verifying number of expressions input - if is too long, empty or non-digit, repeat intake and save error message
+                //4.2.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("numbersInExpression")).size(); i++) {
+                    if (!checkInput(req.getParameter("numbersInExpression")).get(i).equals("good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                    if (checkInput(req.getParameter("numbersInExpression")).get(i).equals("too long")) {
+                        errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+
+                    }
+                }
+
+                //4.2.4 Verifying number of expressions input - if is too long, empty or non-digit, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
                     if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("good input")
                     ) {
@@ -326,14 +367,14 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.2.4 Verifying radio box for int/double
+                //4.2.5 Verifying radio box for int/double
                 if (req.getParameter("Integer1") == null && req.getParameter("Double1") == null) {
                     errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
                     repeatIntake = true;
                     errorCounter++;
                 }
 
-                //4.2.5 Verifying minimum result range
+                //4.2.6 Verifying minimum result range
                 for (int i = 0; i < checkInput(req.getParameter("resultMin")).size(); i++) {
                     if (!checkInput(req.getParameter("resultMin")).get(i).equals("good input")
                     ) {
@@ -349,7 +390,7 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.2.6 Verifying maximum result range
+                //4.2.7 Verifying maximum result range
                 for (int i = 0; i < checkInput(req.getParameter("resultMax")).size(); i++) {
                     if (!checkInput(req.getParameter("resultMax")).get(i).equals("good input")
                     ) {
@@ -364,7 +405,7 @@ public class Adaptor extends HttpServlet {
 
                     }
 
-                    //4.2.7 Verifying if input is an operator, or if input is empty
+                    //4.2.8 Verifying if input is an operator, or if input is empty
                     if (req.getParameter("add") == null
                             && req.getParameter("subtract") == null
                             && req.getParameter("multiply") == null
@@ -374,7 +415,7 @@ public class Adaptor extends HttpServlet {
                         errorCounter++;
                     }
 
-                    //4.2.8 Collecting operators input
+                    //4.2.9 Collecting operators input
                     if (!repeatIntake) {
                         if (req.getParameter("add") != null) inputOperators.add("+");
                         if (req.getParameter("subtract") != null) inputOperators.add("-");
@@ -383,7 +424,7 @@ public class Adaptor extends HttpServlet {
                     }
 
 
-                    //4.2.9 Redirect back to randomQuiz if input is invalid
+                    //4.2.10 Redirect back to randomQuiz if input is invalid
                     if (repeatIntake) {
                         RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
                         try {
@@ -395,12 +436,13 @@ public class Adaptor extends HttpServlet {
                         }
                     }
                 }
-                //4.2.10 Create quiz object if user input contains no errors
+                //4.2.11 Create quiz object if user input contains no errors
                 if (!repeatIntake) {
                     Quiz resultRangeQuiz = new Quiz(req.getParameter("quizName"),
                             inputOperators,
                             Integer.parseInt(req.getParameter("highestNumber")),
                             Integer.parseInt(req.getParameter("numberOfExpressions")),
+                            Integer.parseInt(req.getParameter("numbersInExpression")),
                             resultType,
                             Double.parseDouble((req.getParameter("resultMin"))),
                             Double.parseDouble(req.getParameter("resultMax")));
@@ -412,6 +454,7 @@ public class Adaptor extends HttpServlet {
             //4.3 Verifying fixedResultQuiz
             case "fixedResultQuiz":
 
+                repeatIntake = false;
                 resetErrorList();
 
                 //4.3.1 Verifying quiz name input - if is empty, repeat intake and save error message
@@ -443,10 +486,25 @@ public class Adaptor extends HttpServlet {
                         errorCounter++;
 
                     }
-
                 }
 
-                //4.3.3 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
+                //4.3.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
+                for (int i = 0; i < checkInput(req.getParameter("numbersInExpression")).size(); i++) {
+                    if (!checkInput(req.getParameter("numbersInExpression")).get(i).equals("good input")
+                    ) {
+                        errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+                    }
+                    if (checkInput(req.getParameter("numbersInExpression")).get(i).equals("too long")) {
+                        errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
+                        repeatIntake = true;
+                        errorCounter++;
+
+                    }
+                }
+
+                //4.3.4 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
                 for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
                     if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("good input")
                     ) {
@@ -463,7 +521,7 @@ public class Adaptor extends HttpServlet {
 
                 }
 
-                //4.3.4 Verifying fixed result input
+                //4.3.5 Verifying fixed result input
                 for (int i = 0; i < checkInput(req.getParameter("fixedResult")).size(); i++) {
                     if (!checkInput(req.getParameter("fixedResult")).get(i).equals("good input")
                     ) {
@@ -480,7 +538,7 @@ public class Adaptor extends HttpServlet {
                 }
 
 
-                //4.3.5 Redirect back to randomQuiz of input is invalid
+                //4.3.6 Redirect back to randomQuiz of input is invalid
                 if (repeatIntake) {
                     RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
                     try {
@@ -492,7 +550,7 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.3.6 Collecting operators input
+                //4.3.7 Collecting operators input
                 if (!repeatIntake) {
                     if (req.getParameter("add") != null) inputOperators.add("+");
                     if (req.getParameter("subtract") != null) inputOperators.add("-");
@@ -500,7 +558,7 @@ public class Adaptor extends HttpServlet {
                     if (req.getParameter("divide") != null) inputOperators.add("/");
                 }
 
-                //4.3.6 Verifying operators input
+                //4.3.8 Verifying operators input
                 if (req.getParameter("add") == null
                         && req.getParameter("subtract") == null
                         && req.getParameter("multiply") == null
@@ -510,11 +568,12 @@ public class Adaptor extends HttpServlet {
                     errorCounter++;
                 }
 
-                //4.3.7 Create quiz object if user input contains no errors
+                //4.3.9 Create quiz object if user input contains no errors
                 if (!repeatIntake) {
                     Quiz fixedResultQuiz = new Quiz(req.getParameter("quizName"),
                             inputOperators,
                             Integer.parseInt(req.getParameter("highestNumber")),
+                            Integer.parseInt(req.getParameter("numbersInExpression")),
                             Integer.parseInt(req.getParameter("numberOfExpressions")),
                             Double.parseDouble(req.getParameter("fixedResult")));
                     quizzes.add(fixedResultQuiz);
@@ -528,7 +587,13 @@ public class Adaptor extends HttpServlet {
         getErrorPosition();
 
 
-        RequestDispatcher rd = req.getRequestDispatcher("/Generator");
+        Generator.generateAllExpressionsAndResults();
+        quizzes.get(0).setQuizResultsAndExpressions(Generator.allExpressionsAndResults.toString());
+Database.checkIfQuizExists(quizzes.get(0));
+        Database.saveInDB(quizzes.get(0));
+        System.out.println(Database.errorList);
+
+        RequestDispatcher rd = req.getRequestDispatcher("Results/Results.jsp");
         try {
             rd.forward(req, resp);
         } catch (ServletException e) {

@@ -22,12 +22,9 @@ public class Generator extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
-        generateAllExpressions();
-        for(int i = 0;i< allExpressions.size();i++){
-            System.out.println(allExpressions.get(i));
-        }
 
     }
+
 
     /**
      * --------------------------------------------------------------------------------
@@ -35,10 +32,6 @@ public class Generator extends HttpServlet {
      * --------------------------------------------------------------------------------
      */
 
-    //1.1 Primitive variables
-    public static int myQuizTime;
-    public static int score = 0;
-    public static int nrOfLevels = 0;
 
     //1.2 Time variables
     public static LocalDate date = LocalDate.now();
@@ -57,6 +50,8 @@ public class Generator extends HttpServlet {
     static public List<String> operatorsList = new ArrayList<>();
     static public List<String> oneExpression = new ArrayList<>();
     static public List<String> allExpressions = new ArrayList<>();
+    static public List<String> allExpressionsResults = new ArrayList<>();
+    static public List<String> allExpressionsAndResults = new ArrayList<>();
     static public String[] defaultOperators = {"+", "-", "*", "/"};
 
     /**
@@ -68,7 +63,7 @@ public class Generator extends HttpServlet {
     //2.1 Generating a list of numbers based on a maximum number and a defined list size
     static public void generateNumberList() {
         numbersList.clear();
-        for (int i = 0; i != Adaptor.quizzes.get(0).getNumberOfExpressions() - 1; i++) {
+        for (int i = 0; i < Adaptor.quizzes.get(0).getNumbersInExpression(); i++) {
             numbersList.add(randomGenerator.nextInt(Adaptor.quizzes.get(0).getHighestNumber()) + 1);
         }
     }
@@ -103,7 +98,7 @@ public class Generator extends HttpServlet {
 
             //2.3.1.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Adaptor.quizzes.get(0).getNumberOfExpressions() + operatorsList.size() - 1; currentNr++) {
+            for (int currentNr = 0; currentNr < Adaptor.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1; currentNr++) {
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
                     nrCounter++;
@@ -126,9 +121,9 @@ public class Generator extends HttpServlet {
             }
 
             //2.3.1.7 Here is where it is checking if expression has a double result. If it has, stop the loop
-            if (resultType.equalsIgnoreCase("Double1")){
+            if (resultType.equalsIgnoreCase("Double1")) {
                 try {
-                    if(calculateExpression(expressionToString(oneExpression))%1!=0){
+                    if (calculateExpression(expressionToString(oneExpression)) % 1 != 0) {
                         stop = true;
                     }
                 } catch (ScriptException e) {
@@ -137,6 +132,11 @@ public class Generator extends HttpServlet {
             }
         }
         while (!stop);
+        try {
+            allExpressionsResults.add(String.valueOf(calculateExpression(expressionToString(oneExpression))));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
     }
 
     //2.3.4 Generating an expression based on a chosen range, min and max, and of a given data type, int or double
@@ -155,7 +155,7 @@ public class Generator extends HttpServlet {
 
             //2.3.4.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Adaptor.quizzes.get(0).getNumberOfExpressions() + operatorsList.size() - 1; currentNr++) {
+            for (int currentNr = 0; currentNr < Adaptor.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1; currentNr++) {
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
                     nrCounter++;
@@ -170,7 +170,7 @@ public class Generator extends HttpServlet {
             if (resultType.equalsIgnoreCase("Integer1")) {
                 try {
                     if (calculateExpression(expressionToString(oneExpression)) % 1 == 0
-                            && calculateExpression(expressionToString(oneExpression)) >=min
+                            && calculateExpression(expressionToString(oneExpression)) >= min
                             && calculateExpression(expressionToString(oneExpression)) <= max) {
                         stop = true;
                     }
@@ -180,11 +180,11 @@ public class Generator extends HttpServlet {
             }
 
             //2.3.4.7 Here is where it is checking if expression has a double result and whether it is in the desired range
-            if (resultType.equalsIgnoreCase("Double1")){
+            if (resultType.equalsIgnoreCase("Double1")) {
                 try {
-                    if(calculateExpression(expressionToString(oneExpression))%1!=0
-                            && calculateExpression(expressionToString(oneExpression)) >=min
-                            && calculateExpression(expressionToString(oneExpression)) <= max){
+                    if (calculateExpression(expressionToString(oneExpression)) % 1 != 0
+                            && calculateExpression(expressionToString(oneExpression)) >= min
+                            && calculateExpression(expressionToString(oneExpression)) <= max) {
                         stop = true;
                     }
                 } catch (ScriptException e) {
@@ -193,11 +193,16 @@ public class Generator extends HttpServlet {
             }
         }
         while (!stop);
+        try {
+            allExpressionsResults.add(String.valueOf(calculateExpression(expressionToString(oneExpression))));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
     }
 
     //2.3.6 Generating an expression based on the the desired result (double)
     static void fixedResultExpression(double result) {
-        boolean stop=false;
+        boolean stop = false;
 
         //2.3.6.1 Opening loop for making sure that the expression generated has an integral result
         do {
@@ -211,7 +216,7 @@ public class Generator extends HttpServlet {
 
             //2.3.6.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Adaptor.quizzes.get(0).getNumberOfExpressions() + operatorsList.size() - 1; currentNr++) {
+            for (int currentNr = 0; currentNr < Adaptor.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1; currentNr++) {
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
                     nrCounter++;
@@ -224,19 +229,24 @@ public class Generator extends HttpServlet {
             //2.3.6.6 Here is where it is checking if expression has the desired result
             try {
                 //2.3.6.7 Calculating the length of the result desired by the user
-                int resultLength=String.valueOf(result).length();
+                int resultLength = String.valueOf(result).length();
                 //2.3.6.8 Converting expression result to String (see 2.3.6.9 to understand why)
-                String expressionResult= String.valueOf((calculateExpression(expressionToString(oneExpression))));
+                String expressionResult = String.valueOf((calculateExpression(expressionToString(oneExpression))));
                 /*2.3.6.9 Shortening expressionResult and input by user (this is so that generator can find expressions)
                           That is achieved by substring-ing the results String by the length of desired result */
-                if (expressionResult.substring(0, 3).equals(String.valueOf(result).substring(0, 3))) {
+                if (expressionResult.equals(String.valueOf(result))) {
                     stop = true;
                 }
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
         }
-        while(!stop);
+        while (!stop);
+        try {
+            allExpressionsResults.add(String.valueOf(calculateExpression(expressionToString(oneExpression))));
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
     }
 
     //2.4 Method for removing the odd operator at the end of the expression
@@ -259,7 +269,8 @@ public class Generator extends HttpServlet {
     }
 
     //2.6 Generating all expressions based on the desired amount => see parameter of method
-    static public void generateAllExpressions() {
+    static public String generateAllExpressions() {
+        allExpressionsAndResults.clear();
         for (int i = 0; i < Adaptor.quizzes.get(0).getNumberOfExpressions(); i++) {
 
             //2.6.0 Generating numbers and operators
@@ -268,7 +279,7 @@ public class Generator extends HttpServlet {
 
             //2.6.1 Generating correct expressions based on quiz type
 
-            switch(Adaptor.quizzes.get(0).getQuizType()) {
+            switch (Adaptor.quizzes.get(0).getQuizType()) {
                 case "randomQuiz":
                     randomExpression(Adaptor.quizzes.get(0).getResultType());
                     break;
@@ -278,13 +289,23 @@ public class Generator extends HttpServlet {
                     break;
 
                 case "resultRangeQuiz":
-                    resultRangeExpression(Adaptor.quizzes.get(0).getResultType(),Adaptor.quizzes.get(0).getResultMin(),Adaptor.quizzes.get(0).getResultMax());
+                    resultRangeExpression(Adaptor.quizzes.get(0).getResultType(), Adaptor.quizzes.get(0).getResultMin(), Adaptor.quizzes.get(0).getResultMax());
                     break;
             }
 
 
             //2.6.2 Using "expressionToStringMethod" to not add anything else into the list besides numbers and operators
             allExpressions.add(expressionToString(oneExpression));
+        }
+        return allExpressions.toString();
+    }
+
+
+    static public void generateAllExpressionsAndResults(){
+        allExpressionsAndResults.clear();
+        generateAllExpressions();
+        for(int i = 0;i< allExpressions.size();i++){
+            allExpressionsAndResults.add("Expression #"+(i+1)+": "+allExpressions.get(i)+" , Result: "+allExpressionsResults.get(i));
         }
     }
 
