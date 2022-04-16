@@ -273,12 +273,12 @@ public class Adaptor extends HttpServlet {
 
                 //4.1.9 Check if quiz exists
                 System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
-                if(Database.checkIfQuizExists(quizzes.get(0))){
-                    repeatIntake=true;
+                if (Database.checkIfQuizExists(quizzes.get(0))) {
+                    repeatIntake = true;
                     errorsList.add(Database.errorList.toString());
                 }
 
-                //4.1.9 Redirect back to randomQuiz of input is invalid
+                //4.1.10 Redirect back to randomQuiz of input is invalid
                 if (repeatIntake) {
                     RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
                     try {
@@ -423,8 +423,29 @@ public class Adaptor extends HttpServlet {
                         if (req.getParameter("divide") != null) inputOperators.add("/");
                     }
 
+                    //4.2.10 Create quiz object if user input contains no errors
+                    if (!repeatIntake) {
+                        Quiz resultRangeQuiz = new Quiz(req.getParameter("quizName"),
+                                inputOperators,
+                                Integer.parseInt(req.getParameter("highestNumber")),
+                                Integer.parseInt(req.getParameter("numberOfExpressions")),
+                                Integer.parseInt(req.getParameter("numbersInExpression")),
+                                resultType,
+                                Double.parseDouble((req.getParameter("resultMin"))),
+                                Double.parseDouble(req.getParameter("resultMax")));
+                        System.out.println(resultRangeQuiz.getQuizName());
+                        quizzes.add(resultRangeQuiz);
+                    }
 
-                    //4.2.10 Redirect back to randomQuiz if input is invalid
+                    //4.1.11 Check if quiz exists
+                    System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
+                    if (Database.checkIfQuizExists(quizzes.get(0))) {
+                        repeatIntake = true;
+                        errorsList.add(Database.errorList.toString());
+                    }
+
+
+                    //4.2.12 Redirect back to resultRangeQuiz if input is invalid
                     if (repeatIntake) {
                         RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
                         try {
@@ -436,19 +457,7 @@ public class Adaptor extends HttpServlet {
                         }
                     }
                 }
-                //4.2.11 Create quiz object if user input contains no errors
-                if (!repeatIntake) {
-                    Quiz resultRangeQuiz = new Quiz(req.getParameter("quizName"),
-                            inputOperators,
-                            Integer.parseInt(req.getParameter("highestNumber")),
-                            Integer.parseInt(req.getParameter("numberOfExpressions")),
-                            Integer.parseInt(req.getParameter("numbersInExpression")),
-                            resultType,
-                            Double.parseDouble((req.getParameter("resultMin"))),
-                            Double.parseDouble(req.getParameter("resultMax")));
-                    System.out.println(resultRangeQuiz.getQuizName());
-                    quizzes.add(resultRangeQuiz);
-                }
+
                 break;
 
             //4.3 Verifying fixedResultQuiz
@@ -538,7 +547,43 @@ public class Adaptor extends HttpServlet {
                 }
 
 
-                //4.3.6 Redirect back to randomQuiz of input is invalid
+                //4.3.6 Collecting operators input
+                if (!repeatIntake) {
+                    if (req.getParameter("add") != null) inputOperators.add("+");
+                    if (req.getParameter("subtract") != null) inputOperators.add("-");
+                    if (req.getParameter("multiply") != null) inputOperators.add("*");
+                    if (req.getParameter("divide") != null) inputOperators.add("/");
+                }
+
+                //4.1.7 Check if quiz exists
+                System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
+                if (Database.checkIfQuizExists(quizzes.get(0))) {
+                    repeatIntake = true;
+                    errorsList.add(Database.errorList.toString());
+                }
+
+                //4.3.8 Create quiz object if user input contains no errors
+                if (!repeatIntake) {
+                    Quiz fixedResultQuiz = new Quiz(req.getParameter("quizName"),
+                            inputOperators,
+                            Integer.parseInt(req.getParameter("highestNumber")),
+                            Integer.parseInt(req.getParameter("numbersInExpression")),
+                            Integer.parseInt(req.getParameter("numberOfExpressions")),
+                            Double.parseDouble(req.getParameter("fixedResult")));
+                    quizzes.add(fixedResultQuiz);
+                }
+
+                //4.3.9 Verifying operators input
+                if (req.getParameter("add") == null
+                        && req.getParameter("subtract") == null
+                        && req.getParameter("multiply") == null
+                        && req.getParameter("divide") == null) {
+                    errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+                    repeatIntake = true;
+                    errorCounter++;
+                }
+
+                //4.3.10 Redirect back to randomQuiz of input is invalid
                 if (repeatIntake) {
                     RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
                     try {
@@ -550,49 +595,24 @@ public class Adaptor extends HttpServlet {
                     }
                 }
 
-                //4.3.7 Collecting operators input
-                if (!repeatIntake) {
-                    if (req.getParameter("add") != null) inputOperators.add("+");
-                    if (req.getParameter("subtract") != null) inputOperators.add("-");
-                    if (req.getParameter("multiply") != null) inputOperators.add("*");
-                    if (req.getParameter("divide") != null) inputOperators.add("/");
-                }
-
-                //4.3.8 Verifying operators input
-                if (req.getParameter("add") == null
-                        && req.getParameter("subtract") == null
-                        && req.getParameter("multiply") == null
-                        && req.getParameter("divide") == null) {
-                    errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
-                    repeatIntake = true;
-                    errorCounter++;
-                }
-
-                //4.3.9 Create quiz object if user input contains no errors
-                if (!repeatIntake) {
-                    Quiz fixedResultQuiz = new Quiz(req.getParameter("quizName"),
-                            inputOperators,
-                            Integer.parseInt(req.getParameter("highestNumber")),
-                            Integer.parseInt(req.getParameter("numbersInExpression")),
-                            Integer.parseInt(req.getParameter("numberOfExpressions")),
-                            Double.parseDouble(req.getParameter("fixedResult")));
-                    quizzes.add(fixedResultQuiz);
-                }
                 break;
 
             default:
                 break;
         }
 
+        //get error position
         getErrorPosition();
 
-
+        //generate expressions
         Generator.generateAllExpressionsAndResults();
+        //setting results and expressions in quiz object
         quizzes.get(0).setQuizResultsAndExpressions(Generator.allExpressionsAndResults.toString());
-Database.checkIfQuizExists(quizzes.get(0));
-        Database.saveInDB(quizzes.get(0));
-        System.out.println(Database.errorList);
 
+        //saving quiz in db
+        Database.saveInDB(quizzes.get(0));
+
+        //redirect to results
         RequestDispatcher rd = req.getRequestDispatcher("Results/Results.jsp");
         try {
             rd.forward(req, resp);
