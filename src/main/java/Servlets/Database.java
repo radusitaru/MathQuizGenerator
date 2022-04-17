@@ -1,5 +1,6 @@
 package Servlets;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.Comparator;
 import java.util.List;
 
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +22,21 @@ public class Database extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
+        System.out.println(req.getParameter("quizName"));
+        getFromDB(req.getParameter("quizName"));
+
+        //redirect to existing quiz
+        RequestDispatcher rd = req.getRequestDispatcher("Results/ExistingQuizResults.jsp");
+        try {
+            rd.forward(req, resp);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+
+        }
+
     }
 
     /**
@@ -30,6 +48,7 @@ public class Database extends HttpServlet {
     static List<String> errorList = new ArrayList<>();
     static List<String> quizNames = new ArrayList<>();
     static List<String> quizParameters = new ArrayList<>();
+    public static List<Quiz> quizFromDB = new ArrayList<>();
 
     /**
      * --------------------------------------------------------------------------------
@@ -129,5 +148,44 @@ public class Database extends HttpServlet {
             e.printStackTrace();
         }
         return quizExists;
+    }
+
+    public static void getFromDB(String quizName) {
+
+        try {
+            //3.3.1 Connecting to database
+            final String URL = "jdbc:postgresql://localhost/";
+            final String USERNAME = "postgres";
+            final String PASSWORD = System.getenv("PWD");
+            Class.forName("org.postgresql.Driver");
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+            //3.3.2 Preparing the query that will extract the data
+            PreparedStatement pSt = conn.prepareStatement("select quizname, quiztype, quizid, quizdate, quizexpressionsandresults, parameters from quiz WHERE quizname=? ");
+            pSt.setString(1, quizName);
+            //3.3.3 Execute query
+            ResultSet rs = pSt.executeQuery();
+            Quiz pulledQuiz = new Quiz();
+            //3.3.5 Execute query as long as there are still items in database
+            while (rs.next()) {
+                if (rs.getString("quizname") != null) {
+                    pulledQuiz.setQuizName((rs.getString("quizname")));
+                    pulledQuiz.setQuizType((rs.getString("quiztype")));
+                    pulledQuiz.setQuizId((rs.getString("quizid")));
+                    pulledQuiz.setQuizDate((rs.getString("quizdate")));
+                    pulledQuiz.setQuizResultsAndExpressions((rs.getString("quizexpressionsandresults")));
+                    pulledQuiz.setParameters((rs.getString("parameters")));
+                    quizFromDB.add(pulledQuiz);
+                }
+            }
+
+            rs.close();
+            pSt.close();
+            conn.close();
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

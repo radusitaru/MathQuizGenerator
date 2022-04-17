@@ -9,7 +9,7 @@
         <b>Fixed result quiz</b><br>
         <br>
     </div>
-    <form name="submit" action="http://localhost:8080/MathQuiz_war_exploded/Adaptor" method="POST">
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Adaptor" method="POST">
         quizName*: <input type="text" name="quizName" id="quizName"/> </br>
         highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/>  </br>
         numbersInExpression*: <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>

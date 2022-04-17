@@ -21,7 +21,7 @@
 <div></div>
 Only select highest number and number of expressions
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuiz_war_exploded/QuizTypes/randomQuiz.jsp"> Random quiz
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/randomQuiz.jsp"> Random quiz
 </button>
 <br>
 <div>
@@ -32,7 +32,7 @@ Only select highest number and number of expressions
 <div></div>
 Select the fixed result for the expressions in the quiz, the highest number and number of expressions
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuiz_war_exploded/QuizTypes/fixedResultQuiz.jsp"> Fixed
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/fixedResultQuiz.jsp"> Fixed
   result quiz
 </button>
 <br>
