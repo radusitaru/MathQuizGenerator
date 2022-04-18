@@ -139,7 +139,6 @@ public class Adaptor extends HttpServlet {
         errorCounter = 1;
     }
 
-
     static public void resetQuizzesList() {
         quizzes.clear();
     }
@@ -153,12 +152,13 @@ public class Adaptor extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
+        //Reset errors & quizzes lists
         resetErrorList();
+        resetQuizzesList();
 
 
         //3. Fetching quiz type
         quizType = req.getParameter("quizType");
-        System.out.println(quizType);
 
         //4. Determining quiz type
         switch (quizType) {
@@ -601,19 +601,8 @@ public class Adaptor extends HttpServlet {
                 break;
         }
 
-        //get error position
-        getErrorPosition();
-
-        //generate expressions
-        Generator.generateAllExpressionsAndResults();
-        //setting results and expressions in quiz object
-        quizzes.get(0).setQuizResultsAndExpressions(Generator.allExpressionsAndResults.toString());
-
-        //saving quiz in db
-        Database.saveInDB(quizzes.get(0));
-
         //redirect to results
-        RequestDispatcher rd = req.getRequestDispatcher("Results/Results.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("/Driver");
         try {
             rd.forward(req, resp);
         } catch (ServletException e) {

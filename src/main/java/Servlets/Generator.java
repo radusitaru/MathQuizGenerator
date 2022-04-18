@@ -271,6 +271,10 @@ public class Generator extends HttpServlet {
     //2.6 Generating all expressions based on the desired amount => see parameter of method
     static public String generateAllExpressions() {
         allExpressionsAndResults.clear();
+        oneExpression.clear();
+        operatorsList.clear();
+        numbersList.clear();
+
         for (int i = 0; i < Adaptor.quizzes.get(0).getNumberOfExpressions(); i++) {
 
             //2.6.0 Generating numbers and operators
