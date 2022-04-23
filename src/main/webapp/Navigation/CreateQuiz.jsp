@@ -28,7 +28,26 @@ Only select highest number and number of expressions
 </div>
 <br>
 
-<b>Model 2: Fixed result quiz </b>
+
+
+<br>
+<b>Model 2: Result range quiz </b>
+<div></div>
+Select the result range for the quiz, the highest number and number of expressions
+<br>
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/resultRangeQuiz.jsp"> Result
+  range quiz
+</button>
+<br>
+<div>
+</div>
+<br>
+
+
+
+
+<br>
+<b>Model 3: Fixed result quiz </b>
 <div></div>
 Select the fixed result for the expressions in the quiz, the highest number and number of expressions
 <br>
@@ -38,16 +57,10 @@ Select the fixed result for the expressions in the quiz, the highest number and 
 <br>
 <div>
 </div>
+<br>
 
-<br>
-<b>Model 3: Result range quiz </b>
-<div></div>
-Select the result range for the quiz, the highest number and number of expressions
-<br>
-<button onclick=document.location="http://localhost:8080/MathQuiz_war_exploded/QuizTypes/resultRangeQuiz.jsp"> Result
-  range quiz
-</button>
-<br>
+
+
 
 <br><b>Back to menu </b>
 <br>

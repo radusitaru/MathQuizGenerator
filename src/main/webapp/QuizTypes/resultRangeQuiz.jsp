@@ -37,6 +37,7 @@
         resultMax: <input type="text" name="resultMax" id="resultMax"/> </br>
         <br>
         <br>
+        <input type="hidden" id="command" name="command" value="generateQuiz">
         <input type="hidden" id="quizType" name="quizType" value="resultRangeQuiz">
         <input type="submit" value="Submit"/>
     </form>

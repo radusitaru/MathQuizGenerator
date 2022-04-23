@@ -44,6 +44,7 @@
         <br>
         <br>
         <input type="hidden" id="quizType" name="quizType" value="randomQuiz">
+        <input type="hidden" id="command" name="command" value="generateQuiz">
         <input type="submit" value="Submit"/>
     </form>
 

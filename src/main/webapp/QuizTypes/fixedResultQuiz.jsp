@@ -30,6 +30,7 @@
         fixedResult*: <input type="text" name="fixedResult" id="fixedResult"/>
         <br>
         <br>
+        <input type="hidden" id="command" name="command" value="generateQuiz">
         <input type="hidden" id="quizType" name="quizType" value="fixedResultQuiz">
         <input type="submit" value="Submit"/>
     </form>

@@ -30,11 +30,24 @@
     <div></div>
     Generate again
     <br>
-    <button onclick=document.location="http://localhost:8080/MathQuiz_war_exploded/Adaptor"> Save quiz in database
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Adaptor" method="POST">
+        <input type="hidden" id="command" name="command" value="generateAgain">
+        <input type="submit" value="Generate again"/>
     </button>
+    </form>
     <br>
     <br>
 
+    <br>
+    <br>
+    <div></div>
+    Generate again
+    <br>
+    <button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/Adaptor"> Save quiz in DB
+        <input type="hidden" id="command2" name="command" value="saveQuizInDB">
+    </button>
+    <br>
+    <br>
 
 </head>
 <body>

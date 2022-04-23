@@ -60,6 +60,16 @@ public class Generator extends HttpServlet {
      * --------------------------------------------------------------------------------
      */
 
+    //2.0 Clear all lists
+    static public void clearAllGeneratorLists(){
+        numbersList.clear();
+        operatorsList.clear();
+        oneExpression.clear();
+        allExpressions.clear();
+        allExpressionsResults.clear();
+        allExpressionsAndResults.clear();
+    }
+
     //2.1 Generating a list of numbers based on a maximum number and a defined list size
     static public void generateNumberList() {
         numbersList.clear();

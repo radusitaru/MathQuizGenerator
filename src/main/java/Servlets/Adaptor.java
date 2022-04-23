@@ -27,13 +27,13 @@ public class Adaptor extends HttpServlet {
     //1.2 String variables
     String quizType;
     LocalDate test = LocalDate.now();
-    String resultType;
 
     //1.3 Lists
     public static List<String> errorsList = new ArrayList<>();
     public static List<Integer> errorPositionInList = new ArrayList<>();
     public static List<Quiz> quizzes = new ArrayList<>();
     public static List<String> inputOperators = new ArrayList<>();
+    public static List<String> quizInput = new ArrayList<>();
 
 
     //1.4 Methods
@@ -149,468 +149,721 @@ public class Adaptor extends HttpServlet {
         }
     }
 
+    static public boolean checkInputAndGenerateRandomQuiz(String quizName,
+                                                          String highestNumber,
+                                                          String numbersInExpression,
+                                                          String numberOfExpressions,
+                                                          String intResult,
+                                                          String doubleResult,
+                                                          String add,
+                                                          String subtract,
+                                                          String multiply,
+                                                          String divide) {
+        repeatIntake = false;
+        resetErrorList();
+        String resultType;
+
+        //Collecting result type
+        if (intResult == null) resultType = doubleResult;
+        else resultType = intResult;
+
+        //4.1.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
+        for (int i = 0; i < checkInput(quizName).size(); i++) {
+            if (checkInput(quizName).get(i).equals("empty input")) {
+                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(quizName).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.1.2 Verifying highest number input - if is too long, empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(highestNumber).size(); i++) {
+            if (!checkInput(highestNumber).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(highestNumber).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " highest number: " + checkInput(highestNumber).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.1.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(numbersInExpression).size(); i++) {
+            if (!checkInput(numbersInExpression).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(numbersInExpression).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(numbersInExpression).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(numbersInExpression).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.1.4 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(numberOfExpressions).size(); i++) {
+            if (!checkInput(numberOfExpressions).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(numberOfExpressions).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " number of expressions: " + checkInput(numberOfExpressions).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.1.5 Verifying radio box for int/double
+        if (intResult == null && doubleResult == null) {
+            errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
+            repeatIntake = true;
+            errorCounter++;
+        }
+
+        //4.1.6 Verifying operators input
+        if (add == null
+                && subtract == null
+                && multiply == null
+                && divide == null) {
+            errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+            repeatIntake = true;
+            errorCounter++;
+        }
+
+        //4.1.7 Collecting operators input
+        if (!repeatIntake) {
+            if (add != null) inputOperators.add("+");
+            if (subtract != null) inputOperators.add("-");
+            if (multiply != null) inputOperators.add("*");
+            if (divide != null) inputOperators.add("/");
+        }
+
+        //4.1.8 Create quiz object if user input contains no errors
+        if (!repeatIntake) {
+            resetQuizzesList();
+            Quiz randomQuiz = new Quiz(quizName,
+                    inputOperators,
+                    Integer.parseInt(highestNumber),
+                    Integer.parseInt(numbersInExpression),
+                    Integer.parseInt(numbersInExpression),
+                    resultType);
+            quizzes.add(randomQuiz);
+            Generator.generateAllExpressions();
+            Generator.generateAllExpressionsAndResults();
+        }
+
+        //4.1.9 Check if quiz exists
+        System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
+        if (Database.checkIfQuizExists(quizzes.get(0))) {
+            repeatIntake = true;
+            errorsList.add(Database.errorList.toString());
+        }
+
+        //4.1.10 If input is correct, save input in list
+        if (!repeatIntake) {
+            quizInput.clear();
+            quizInput.add(quizName);
+            quizInput.add(highestNumber);
+            quizInput.add(numbersInExpression);
+            quizInput.add(numberOfExpressions);
+            quizInput.add(intResult);
+            quizInput.add(doubleResult);
+            quizInput.add(add);
+            quizInput.add(subtract);
+            quizInput.add(multiply);
+            quizInput.add(divide);
+        }
+
+        return repeatIntake;
+    }
+
+    static public boolean checkInputAndGenerateResultRangeQuiz(String quizName,
+                                                               String highestNumber,
+                                                               String numbersInExpression,
+                                                               String numberOfExpressions,
+                                                               String intResult,
+                                                               String doubleResult,
+                                                               String resultMin,
+                                                               String resultMax,
+                                                               String add,
+                                                               String subtract,
+                                                               String multiply,
+                                                               String divide) {
+
+        repeatIntake = false;
+        resetErrorList();
+        String resultType;
+
+        //Collecting result type
+        if (intResult == null) resultType = doubleResult;
+        else resultType = intResult;
+
+        //4.2.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
+        for (int i = 0; i < checkInput(quizName).size(); i++) {
+            if (checkInput(quizName).get(i).equals("Empty input")) {
+                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(quizName).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.2.2 Verifying highest number input - if is empty,too long or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(highestNumber).size(); i++) {
+            if (checkInput(highestNumber).get(i).equals("empty input")
+                    ||
+                    checkInput(highestNumber).get(i).equals("empty input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(highestNumber).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.2.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(numbersInExpression).size(); i++) {
+            if (!checkInput(numbersInExpression).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(numbersInExpression).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(numbersInExpression).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(numbersInExpression).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.2.4 Verifying number of expressions input - if is too long, empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(numberOfExpressions).size(); i++) {
+            if (!checkInput(numberOfExpressions).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(numberOfExpressions).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.2.5 Verifying radio box for int/double
+        if (intResult == null && doubleResult == null) {
+            errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
+            repeatIntake = true;
+            errorCounter++;
+        }
+
+        //4.2.6 Verifying minimum result range
+        for (int i = 0; i < checkInput(resultMin).size(); i++) {
+            if (!checkInput(resultMin).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(resultMin).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+
+            if (checkInput(resultMin).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(resultMin).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+        }
+
+        //4.2.7 Verifying maximum result range
+        for (int i = 0; i < checkInput(resultMax).size(); i++) {
+            if (!checkInput(resultMax).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(resultMax).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(resultMax).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(resultMax).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+
+            //4.2.8 Verifying if input is an operator, or if input is empty
+            if (add == null
+                    && subtract == null
+                    && multiply == null
+                    && divide == null) {
+                errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+                repeatIntake = true;
+                errorCounter++;
+            }
+
+            //4.2.9 Collecting operators input
+            if (!repeatIntake) {
+                if (add != null) inputOperators.add("+");
+                if (subtract != null) inputOperators.add("-");
+                if (multiply != null) inputOperators.add("*");
+                if (divide != null) inputOperators.add("/");
+            }
+
+            //4.2.10 Create quiz object if user input contains no errors
+            if (!repeatIntake) {
+                Quiz resultRangeQuiz = new Quiz(quizName,
+                        inputOperators,
+                        Integer.parseInt(highestNumber),
+                        Integer.parseInt(numbersInExpression),
+                        Integer.parseInt(numberOfExpressions),
+                        resultType,
+                        Double.parseDouble(resultMin),
+                        Double.parseDouble(resultMax));
+                quizzes.add(resultRangeQuiz);
+                Generator.generateAllExpressions();
+                Generator.generateAllExpressionsAndResults();
+            }
+
+            //4.2.11 Check if quiz exists
+            System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
+            if (Database.checkIfQuizExists(quizzes.get(0))) {
+                repeatIntake = true;
+                errorsList.add(Database.errorList.toString());
+            }
+        }
+
+        //4.2.12 If input is correct, save input in list
+        if (!repeatIntake) {
+            quizInput.clear();
+            quizInput.add(quizName);
+            quizInput.add(highestNumber);
+            quizInput.add(numbersInExpression);
+            quizInput.add(numberOfExpressions);
+            quizInput.add(intResult);
+            quizInput.add(doubleResult);
+            quizInput.add(resultMin);
+            quizInput.add(resultMax);
+            quizInput.add(add);
+            quizInput.add(subtract);
+            quizInput.add(multiply);
+            quizInput.add(divide);
+        }
+
+        return repeatIntake;
+    }
+
+    public static boolean checkInputAndGenerateFixedResultQuiz(String quizName,
+                                                               String highestNumber,
+                                                               String numbersInExpression,
+                                                               String numberOfExpressions,
+                                                               String fixedResult,
+                                                               String add,
+                                                               String subtract,
+                                                               String multiply,
+                                                               String divide) {
+
+        //4.3.1 Verifying quiz name input - if is empty, repeat intake and save error message
+        for (int i = 0; i < checkInput(quizName).size(); i++) {
+            if (checkInput(quizName).get(i).equals("empty input")) {
+                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(quizName).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on quizName: " + checkInput(quizName).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+
+        }
+
+        //4.3.2 Verifying highest number input - if is empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(highestNumber).size(); i++) {
+            if (!checkInput(highestNumber).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(highestNumber).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.3.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(numbersInExpression).size(); i++) {
+            if (!checkInput(numbersInExpression).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(numbersInExpression).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(numbersInExpression).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(numbersInExpression).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+        }
+
+        //4.3.4 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
+        for (int i = 0; i < checkInput(numberOfExpressions).size(); i++) {
+            if (!checkInput(numberOfExpressions).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(numberOfExpressions).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                repeatIntake = true;
+                errorCounter++;
+
+            }
+
+        }
+
+        //4.3.5 Verifying fixed result input
+        for (int i = 0; i < checkInput(fixedResult).size(); i++) {
+            if (!checkInput(fixedResult).get(i).equals("good input")
+            ) {
+                errorsList.add("Error #" + errorCounter + " on fixed result: " + checkInput(fixedResult).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+            if (checkInput(fixedResult).get(i).equals("too long")) {
+                errorsList.add("Error #" + errorCounter + " fixed result: " + checkInput(fixedResult).get(i));
+                repeatIntake = true;
+                errorCounter++;
+            }
+
+        }
+        //4.3.6 Collecting operators input
+        if (!repeatIntake) {
+            if (add != null) inputOperators.add("+");
+            if (subtract != null) inputOperators.add("-");
+            if (multiply != null) inputOperators.add("*");
+            if (divide != null) inputOperators.add("/");
+        }
+
+        //4.3.8 Create quiz object if user input contains no errors
+        if (!repeatIntake) {
+            Quiz fixedResultQuiz = new Quiz(quizName,
+                    inputOperators,
+                    Integer.parseInt(highestNumber),
+                    Integer.parseInt(numbersInExpression),
+                    Integer.parseInt(numberOfExpressions),
+                    Double.parseDouble(fixedResult));
+            quizzes.add(fixedResultQuiz);
+            Generator.generateAllExpressions();
+            Generator.generateAllExpressionsAndResults();
+        }
+
+
+        //4.1.7 Check if quiz exists
+        if (Database.checkIfQuizExists(quizzes.get(0))) {
+            repeatIntake = true;
+            errorsList.add(Database.errorList.toString());
+        }
+
+
+        //4.3.9 Verifying operators input
+        if (add == null
+                && subtract == null
+                && multiply == null
+                && divide == null) {
+            errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+            repeatIntake = true;
+            errorCounter++;
+        }
+
+        //4.2.12 If input is correct, save input in list
+        if (!repeatIntake) {
+            quizInput.clear();
+            quizInput.add(quizName);
+            quizInput.add(highestNumber);
+            quizInput.add(numbersInExpression);
+            quizInput.add(numberOfExpressions);
+            quizInput.add(fixedResult);
+            quizInput.add(add);
+            quizInput.add(subtract);
+            quizInput.add(multiply);
+            quizInput.add(divide);
+        }
+
+        return repeatIntake;
+    }
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
-        //Reset errors & quizzes lists
+        //Get the positions of the errors
+        getErrorPosition();
+
+        //Reset error list
         resetErrorList();
-        resetQuizzesList();
 
 
-        //3. Fetching quiz type
-        quizType = req.getParameter("quizType");
-
-        //4. Determining quiz type
-        switch (quizType) {
-
-            //4.1 Verifying random quiz input
-            case "randomQuiz":
-                repeatIntake = false;
-                resetErrorList();
-
-                //Collecting result type
-                if (req.getParameter("Integer1") == null) resultType = req.getParameter("Double1");
-                else resultType = req.getParameter("Integer1");
-
-                //4.1.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
-                    if (checkInput(req.getParameter("quizName")).get(i).equals("empty input")) {
-                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("quizName")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.1.2 Verifying highest number input - if is too long, empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("highestNumber")).size(); i++) {
-                    if (!checkInput(req.getParameter("highestNumber")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.1.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("numbersInExpression")).size(); i++) {
-                    if (!checkInput(req.getParameter("numbersInExpression")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("numbersInExpression")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.1.4 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
-                    if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.1.5 Verifying radio box for int/double
-                if (req.getParameter("Integer1") == null && req.getParameter("Double1") == null) {
-                    errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
-                    repeatIntake = true;
-                    errorCounter++;
-                }
-
-                //4.1.6 Verifying operators input
-                if (req.getParameter("add") == null
-                        && req.getParameter("subtract") == null
-                        && req.getParameter("multiply") == null
-                        && req.getParameter("divide") == null) {
-                    errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
-                    repeatIntake = true;
-                    errorCounter++;
-                }
-
-                //4.1.7 Collecting operators input
-                if (!repeatIntake) {
-                    if (req.getParameter("add") != null) inputOperators.add("+");
-                    if (req.getParameter("subtract") != null) inputOperators.add("-");
-                    if (req.getParameter("multiply") != null) inputOperators.add("*");
-                    if (req.getParameter("divide") != null) inputOperators.add("/");
-                }
-
-                //4.1.8 Create quiz object if user input contains no errors
-                if (!repeatIntake) {
-                    Quiz randomQuiz = new Quiz(req.getParameter("quizName"),
-                            inputOperators,
-                            Integer.parseInt(req.getParameter("highestNumber")),
-                            Integer.parseInt(req.getParameter("numbersInExpression")),
-                            Integer.parseInt(req.getParameter("numberOfExpressions")),
-                            resultType);
-                    quizzes.add(randomQuiz);
-                }
-
-                //4.1.9 Check if quiz exists
-                System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
-                if (Database.checkIfQuizExists(quizzes.get(0))) {
-                    repeatIntake = true;
-                    errorsList.add(Database.errorList.toString());
-                }
-
-                //4.1.10 Redirect back to randomQuiz of input is invalid
-                if (repeatIntake) {
-                    RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
-                    try {
-                        rd.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+        switch (req.getParameter("command")) {
+            case "generateQuiz":
+                //3. Fetching quiz type
+                quizType = req.getParameter("quizType");
 
 
-                break;
+                //4. Determining quiz type
+                switch (quizType) {
 
-            //4.2 Verifying resultRangeQuiz
-            case "resultRangeQuiz":
-                repeatIntake = false;
-                resetErrorList();
+                    //4.1 Verifying random quiz input
+                    case "randomQuiz":
 
-                //Collecting result type
-                if (req.getParameter("Integer1") == null) resultType = req.getParameter("Double1");
-                else resultType = req.getParameter("Integer1");
+                        checkInputAndGenerateRandomQuiz(req.getParameter("quizName"),
+                                req.getParameter("highestNumber"),
+                                req.getParameter("numbersInExpression"),
+                                req.getParameter("numberOfExpressions"),
+                                req.getParameter("Integer1"),
+                                req.getParameter("Double1"),
+                                req.getParameter("add"),
+                                req.getParameter("subtract"),
+                                req.getParameter("multiply"),
+                                req.getParameter("divide"));
 
-                //4.2.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
-                    if (checkInput(req.getParameter("quizName")).get(i).equals("Empty input")) {
-                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("quizName")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.2.2 Verifying highest number input - if is empty,too long or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("highestNumber")).size(); i++) {
-                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("empty input")
-                            ||
-                            checkInput(req.getParameter("highestNumber")).get(i).equals("empty input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.2.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("numbersInExpression")).size(); i++) {
-                    if (!checkInput(req.getParameter("numbersInExpression")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("numbersInExpression")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.2.4 Verifying number of expressions input - if is too long, empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
-                    if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.2.5 Verifying radio box for int/double
-                if (req.getParameter("Integer1") == null && req.getParameter("Double1") == null) {
-                    errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
-                    repeatIntake = true;
-                    errorCounter++;
-                }
-
-                //4.2.6 Verifying minimum result range
-                for (int i = 0; i < checkInput(req.getParameter("resultMin")).size(); i++) {
-                    if (!checkInput(req.getParameter("resultMin")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(req.getParameter("resultMin")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-
-                    if (checkInput(req.getParameter("resultMin")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(req.getParameter("resultMin")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                }
-
-                //4.2.7 Verifying maximum result range
-                for (int i = 0; i < checkInput(req.getParameter("resultMax")).size(); i++) {
-                    if (!checkInput(req.getParameter("resultMax")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(req.getParameter("resultMax")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("resultMax")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(req.getParameter("resultMax")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-
-                    //4.2.8 Verifying if input is an operator, or if input is empty
-                    if (req.getParameter("add") == null
-                            && req.getParameter("subtract") == null
-                            && req.getParameter("multiply") == null
-                            && req.getParameter("divide") == null) {
-                        errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-
-                    //4.2.9 Collecting operators input
-                    if (!repeatIntake) {
-                        if (req.getParameter("add") != null) inputOperators.add("+");
-                        if (req.getParameter("subtract") != null) inputOperators.add("-");
-                        if (req.getParameter("multiply") != null) inputOperators.add("*");
-                        if (req.getParameter("divide") != null) inputOperators.add("/");
-                    }
-
-                    //4.2.10 Create quiz object if user input contains no errors
-                    if (!repeatIntake) {
-                        Quiz resultRangeQuiz = new Quiz(req.getParameter("quizName"),
-                                inputOperators,
-                                Integer.parseInt(req.getParameter("highestNumber")),
-                                Integer.parseInt(req.getParameter("numberOfExpressions")),
-                                Integer.parseInt(req.getParameter("numbersInExpression")),
-                                resultType,
-                                Double.parseDouble((req.getParameter("resultMin"))),
-                                Double.parseDouble(req.getParameter("resultMax")));
-                        System.out.println(resultRangeQuiz.getQuizName());
-                        quizzes.add(resultRangeQuiz);
-                    }
-
-                    //4.1.11 Check if quiz exists
-                    System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
-                    if (Database.checkIfQuizExists(quizzes.get(0))) {
-                        repeatIntake = true;
-                        errorsList.add(Database.errorList.toString());
-                    }
-
-
-                    //4.2.12 Redirect back to resultRangeQuiz if input is invalid
-                    if (repeatIntake) {
-                        RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
-                        try {
-                            rd.forward(req, resp);
-                        } catch (ServletException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        //4.1.10 Redirect back to randomQuiz of input is invalid
+                        if (repeatIntake) {
+                            RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
+                            try {
+                                rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                }
+                        break;
 
+                    //4.2 Verifying resultRangeQuiz
+                    case "resultRangeQuiz":
+                        repeatIntake = false;
+                        resetErrorList();
+
+                        checkInputAndGenerateResultRangeQuiz(
+                                req.getParameter("quizName"),
+                                req.getParameter("highestNumber"),
+                                req.getParameter("numbersInExpression"),
+                                req.getParameter("numberOfExpressions"),
+                                req.getParameter("Integer1"),
+                                req.getParameter("Double1"),
+                                req.getParameter("resultMin"),
+                                req.getParameter("resultMax"),
+                                req.getParameter("add"),
+                                req.getParameter("subtract"),
+                                req.getParameter("multiply"),
+                                req.getParameter("divide"));
+
+                        //4.2.12 Redirect back to resultRangeQuiz if input is invalid
+                        if (repeatIntake) {
+                            RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
+                            try {
+                                rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+
+
+                    //4.3 Verifying fixedResultQuiz
+                    case "fixedResultQuiz":
+
+                        repeatIntake = false;
+                        resetErrorList();
+
+                        checkInputAndGenerateFixedResultQuiz(req.getParameter("quizName"),
+                                req.getParameter("highestNumber"),
+                                req.getParameter("numbersInExpression"),
+                                req.getParameter("numberOfExpressions"),
+                                req.getParameter("fixedResult"),
+                                req.getParameter("add"),
+                                req.getParameter("subtract"),
+                                req.getParameter("multiply"),
+                                req.getParameter("divide"));
+
+
+                        //4.3.10 Redirect back to randomQuiz of input is invalid
+                        if (repeatIntake) {
+                            RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
+                            try {
+                                rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
                 break;
+            case "generateAgain":
 
-            //4.3 Verifying fixedResultQuiz
-            case "fixedResultQuiz":
+                quizType = quizzes.get(0).getQuizType();
 
-                repeatIntake = false;
-                resetErrorList();
+                switch (quizType) {
 
-                //4.3.1 Verifying quiz name input - if is empty, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("quizName")).size(); i++) {
-                    if (checkInput(req.getParameter("quizName")).get(i).equals("empty input")) {
-                        errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("quizName")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on quizName: " + checkInput(req.getParameter("quizName")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
+                    //4.1 Verifying random quiz input
+                    case "randomQuiz":
 
+                        resetErrorList();
+                        resetQuizzesList();
+                        Generator.clearAllGeneratorLists();
+
+                        checkInputAndGenerateRandomQuiz(quizInput.get(0),
+                                quizInput.get(1),
+                                quizInput.get(2),
+                                quizInput.get(3),
+                                quizInput.get(4),
+                                quizInput.get(5),
+                                quizInput.get(6),
+                                quizInput.get(7),
+                                quizInput.get(8),
+                                quizInput.get(9));
+
+                        //4.1.10 Redirect back to randomQuiz of input is invalid
+                        if (repeatIntake) {
+                            RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
+                            try {
+                                rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+
+                    //4.2 Verifying resultRangeQuiz
+                    case "resultRangeQuiz":
+                        repeatIntake = false;
+                        resetErrorList();
+                        resetQuizzesList();
+                        Generator.clearAllGeneratorLists();
+
+                        checkInputAndGenerateResultRangeQuiz(quizInput.get(0),
+                                quizInput.get(1),
+                                quizInput.get(2),
+                                quizInput.get(3),
+                                quizInput.get(4),
+                                quizInput.get(5),
+                                quizInput.get(6),
+                                quizInput.get(7),
+                                quizInput.get(8),
+                                quizInput.get(9),
+                                quizInput.get(10),
+                                quizInput.get(11));
+
+
+
+
+                        //4.2.12 Redirect back to resultRangeQuiz if input is invalid
+                        if (repeatIntake) {
+                            RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
+                            try {
+                                rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+
+
+                    //4.3 Verifying fixedResultQuiz
+                    case "fixedResultQuiz":
+
+                        repeatIntake = false;
+                        resetErrorList();
+                        resetQuizzesList();
+                        Generator.clearAllGeneratorLists();
+
+                        checkInputAndGenerateFixedResultQuiz(quizInput.get(0),
+                                quizInput.get(1),
+                                quizInput.get(2),
+                                quizInput.get(3),
+                                quizInput.get(4),
+                                quizInput.get(5),
+                                quizInput.get(6),
+                                quizInput.get(7),
+                                quizInput.get(8));
+
+
+                        //4.3.10 Redirect back to randomQuiz of input is invalid
+                        if (repeatIntake) {
+                            RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
+                            try {
+                                rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        break;
+
+                    default:
+                        break;
                 }
-
-                //4.3.2 Verifying highest number input - if is empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("highestNumber")).size(); i++) {
-                    if (!checkInput(req.getParameter("highestNumber")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("highestNumber")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(req.getParameter("highestNumber")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.3.3 Verifying numbers in expression input - if is empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("numbersInExpression")).size(); i++) {
-                    if (!checkInput(req.getParameter("numbersInExpression")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("numbersInExpression")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(req.getParameter("numbersInExpression")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-                }
-
-                //4.3.4 Verifying number of expressions input - if is empty or non-digit, repeat intake and save error message
-                for (int i = 0; i < checkInput(req.getParameter("numberOfExpressions")).size(); i++) {
-                    if (!checkInput(req.getParameter("numberOfExpressions")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("numberOfExpressions")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(req.getParameter("numberOfExpressions")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-
-                    }
-
-                }
-
-                //4.3.5 Verifying fixed result input
-                for (int i = 0; i < checkInput(req.getParameter("fixedResult")).size(); i++) {
-                    if (!checkInput(req.getParameter("fixedResult")).get(i).equals("good input")
-                    ) {
-                        errorsList.add("Error #" + errorCounter + " on fixed result: " + checkInput(req.getParameter("fixedResult")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-                    if (checkInput(req.getParameter("fixedResult")).get(i).equals("too long")) {
-                        errorsList.add("Error #" + errorCounter + " fixed result: " + checkInput(req.getParameter("fixedResult")).get(i));
-                        repeatIntake = true;
-                        errorCounter++;
-                    }
-
-                }
-
-
-                //4.3.6 Collecting operators input
-                if (!repeatIntake) {
-                    if (req.getParameter("add") != null) inputOperators.add("+");
-                    if (req.getParameter("subtract") != null) inputOperators.add("-");
-                    if (req.getParameter("multiply") != null) inputOperators.add("*");
-                    if (req.getParameter("divide") != null) inputOperators.add("/");
-                }
-
-                //4.1.7 Check if quiz exists
-                System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
-                if (Database.checkIfQuizExists(quizzes.get(0))) {
-                    repeatIntake = true;
-                    errorsList.add(Database.errorList.toString());
-                }
-
-                //4.3.8 Create quiz object if user input contains no errors
-                if (!repeatIntake) {
-                    Quiz fixedResultQuiz = new Quiz(req.getParameter("quizName"),
-                            inputOperators,
-                            Integer.parseInt(req.getParameter("highestNumber")),
-                            Integer.parseInt(req.getParameter("numbersInExpression")),
-                            Integer.parseInt(req.getParameter("numberOfExpressions")),
-                            Double.parseDouble(req.getParameter("fixedResult")));
-                    quizzes.add(fixedResultQuiz);
-                }
-
-                //4.3.9 Verifying operators input
-                if (req.getParameter("add") == null
-                        && req.getParameter("subtract") == null
-                        && req.getParameter("multiply") == null
-                        && req.getParameter("divide") == null) {
-                    errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
-                    repeatIntake = true;
-                    errorCounter++;
-                }
-
-                //4.3.10 Redirect back to randomQuiz of input is invalid
-                if (repeatIntake) {
-                    RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
-                    try {
-                        rd.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
                 break;
-
+            case "saveQuizInDB":
+                Database.saveInDB(quizzes.get(0));
+                break;
             default:
                 break;
         }
 
+
         //redirect to results
-        RequestDispatcher rd = req.getRequestDispatcher("/Driver");
+        RequestDispatcher rd = req.getRequestDispatcher("/Results/Results.jsp");
         try {
             rd.forward(req, resp);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-
-
         }
     }
 }
