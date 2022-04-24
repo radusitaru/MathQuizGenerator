@@ -19,5 +19,10 @@ Quiz expressions and results: <%=Database.quizFromDB.get(0).getQuizResultsAndExp
 Quiz parameters: <%=Database.quizFromDB.get(0).getParameters()%><br>
 <body>
 
+<br>
+<br>
+<button onclick="document.location='http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html'"> Back </button>
+<br>
+
 </body>
 </html>

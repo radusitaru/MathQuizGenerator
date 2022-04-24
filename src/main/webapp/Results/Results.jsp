@@ -1,6 +1,6 @@
 <%@ page import="Servlets.Generator" %>
 <%@ page import="static Servlets.Generator.generateAllExpressions" %>
-<%@ page import="Servlets.Adaptor" %>
+<%@ page import="Servlets.Driver" %>
 <%@ page import="static Servlets.Generator.allExpressionsAndResults" %><%--
   Created by IntelliJ IDEA.
   User: radus
@@ -14,40 +14,35 @@
     <title>Results</title>
 
     <b>Quiz name:</b>
-    <b><%=Adaptor.quizzes.get(0).getQuizName()%>
+    <b><%=Driver.quizzes.get(0).getQuizName()%>
     </b> <br>
     <b>Quiz type:</b>
-    <b><%=Adaptor.quizzes.get(0).getQuizType()%>
+    <b><%=Driver.quizzes.get(0).getQuizType()%>
     </b>
     <br>
     <br>
 
     <%=allExpressionsAndResults.toString()%>
 
-
-    <br>
     <br>
     <div></div>
-    Generate again
     <br>
-    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Adaptor" method="POST">
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
         <input type="hidden" id="command" name="command" value="generateAgain">
         <input type="submit" value="Generate again"/>
     </button>
     </form>
+    <div></div>
     <br>
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
+        <input type="hidden" id="command" name="command" value="saveQuizInDB">
+        <input type="submit" value="SaveQuizInDB"/>
+        </button>
+    </form>
+    <br>
+    <button onclick="document.location='http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html'"> Back to menu</button>
     <br>
 
-    <br>
-    <br>
-    <div></div>
-    Generate again
-    <br>
-    <button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/Adaptor"> Save quiz in DB
-        <input type="hidden" id="command2" name="command" value="saveQuizInDB">
-    </button>
-    <br>
-    <br>
 
 </head>
 <body>

@@ -1,4 +1,4 @@
-<%@ page import="Servlets.Adaptor" %>
+<%@ page import="Servlets.Driver" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
         <b>Result range quiz</b><br>
         <br>
     </div>
-    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Adaptor" method="POST">
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
         quizName*: <input type="text" name="quizName" id="quizName"/> </br>
         highestNumber*: <input type="text" name="highestNumber" id="highestNumber"/> </br>
         numbersInExpression*: <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>
@@ -44,12 +44,11 @@
 
 
 
-    <%=Adaptor.errorsList.toString()%>
+    <b>Errors:</b>  <%=Driver.errorsList.toString()%>
 
     <br>
-    <br><b>Back </b>
     <br>
-    <button onclick="document.location='http://localhost:8080/MathQuiz_war_exploded/Navigation/CreateQuiz.jsp'"> Back </button>
+    <button onclick="document.location='http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/CreateQuiz.jsp'"> Back </button>
     <br>
 
 </head>

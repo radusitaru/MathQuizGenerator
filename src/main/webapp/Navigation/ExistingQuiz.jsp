@@ -10,14 +10,19 @@
 <head>
     <title>Select existing quiz</title>
 </head>
-
+<b>Search by quiz name</b>
+<br>
+<br>
 <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Database" method="POST">
     quizName*: <input type="text" name="quizName" id="quizName"/>  </br>
+    <br>
     <input type="submit" value="Submit"/>
 </form>
 <body>
 
-
+<br>
+<button onclick="document.location='http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html'"> Back </button>
+<br>
 
 
 </body>

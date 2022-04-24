@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,8 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-@WebServlet("/Adaptor")
-public class Adaptor extends HttpServlet {
+@WebServlet("/Driver")
+public class Driver extends HttpServlet {
 
     //1. Variables
 
@@ -26,7 +25,6 @@ public class Adaptor extends HttpServlet {
 
     //1.2 String variables
     String quizType;
-    LocalDate test = LocalDate.now();
 
     //1.3 Lists
     public static List<String> errorsList = new ArrayList<>();
@@ -43,12 +41,12 @@ public class Adaptor extends HttpServlet {
 
         //1.4.2 Method variables
         int dotCounter = 0;
-        int firstChar = 0;
+        int firstChar;
         int nextChar = 1;
         boolean isDotFirst = false;
         boolean isDotLast = false;
         boolean isMultipleDots = false;
-        boolean isStringChar = false;
+        boolean isStringChar;
         boolean isWrongInput = false;
         boolean isEmptyInput = true;
         boolean isTooLong = false;
@@ -170,12 +168,12 @@ public class Adaptor extends HttpServlet {
         //4.1.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
         for (int i = 0; i < checkInput(quizName).size(); i++) {
             if (checkInput(quizName).get(i).equals("empty input")) {
-                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on quiz name: " + checkInput(quizName).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(quizName).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on quiz name: " + checkInput(quizName).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -186,12 +184,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(highestNumber).size(); i++) {
             if (!checkInput(highestNumber).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on highest number: " + checkInput(highestNumber).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(highestNumber).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " highest number: " + checkInput(highestNumber).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> highest number: " + checkInput(highestNumber).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -202,12 +200,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(numbersInExpression).size(); i++) {
             if (!checkInput(numbersInExpression).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(numbersInExpression).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on numbers in expression: " + checkInput(numbersInExpression).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(numbersInExpression).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(numbersInExpression).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> numbers in expression: " + checkInput(numbersInExpression).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -218,12 +216,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(numberOfExpressions).size(); i++) {
             if (!checkInput(numberOfExpressions).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on number of expressions: " + checkInput(numberOfExpressions).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(numberOfExpressions).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " number of expressions: " + checkInput(numberOfExpressions).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> number of expressions: " + checkInput(numberOfExpressions).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -232,7 +230,7 @@ public class Adaptor extends HttpServlet {
 
         //4.1.5 Verifying radio box for int/double
         if (intResult == null && doubleResult == null) {
-            errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
+            errorsList.add("<br> <b>Error #" + errorCounter + "</b> on result type: " + "empty input");
             repeatIntake = true;
             errorCounter++;
         }
@@ -242,9 +240,10 @@ public class Adaptor extends HttpServlet {
                 && subtract == null
                 && multiply == null
                 && divide == null) {
-            errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+            errorsList.add("<br> <b>Error #" + errorCounter + "</b> on operators: " + "empty input");
             repeatIntake = true;
             errorCounter++;
+            System.out.println("operators repeatIntake=" + repeatIntake);
         }
 
         //4.1.7 Collecting operators input
@@ -266,14 +265,17 @@ public class Adaptor extends HttpServlet {
                     resultType);
             quizzes.add(randomQuiz);
             Generator.generateAllExpressions();
-            Generator.generateAllExpressionsAndResults();
+            Generator.concatenateExpressionsAndResults();
+            randomQuiz.setQuizResultsAndExpressions();
         }
 
         //4.1.9 Check if quiz exists
-        System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
-        if (Database.checkIfQuizExists(quizzes.get(0))) {
-            repeatIntake = true;
-            errorsList.add(Database.errorList.toString());
+        if (!repeatIntake) {
+            if (Database.checkIfQuizExists(quizzes.get(0))) {
+                repeatIntake = true;
+                errorsList.add(Database.errorList.toString());
+                quizzes.clear();
+            }
         }
 
         //4.1.10 If input is correct, save input in list
@@ -318,12 +320,12 @@ public class Adaptor extends HttpServlet {
         //4.2.1 Verifying quiz name input - if is empty or too long, repeat intake and save error message
         for (int i = 0; i < checkInput(quizName).size(); i++) {
             if (checkInput(quizName).get(i).equals("Empty input")) {
-                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on quiz name: " + checkInput(quizName).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(quizName).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on quiz name: " + checkInput(quizName).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -336,12 +338,12 @@ public class Adaptor extends HttpServlet {
                     ||
                     checkInput(highestNumber).get(i).equals("empty input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on highest number: " + checkInput(highestNumber).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(highestNumber).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on highest number: " + checkInput(highestNumber).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -352,12 +354,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(numbersInExpression).size(); i++) {
             if (!checkInput(numbersInExpression).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(numbersInExpression).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on numbers in expression: " + checkInput(numbersInExpression).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(numbersInExpression).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(numbersInExpression).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> numbers in expression: " + checkInput(numbersInExpression).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -368,12 +370,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(numberOfExpressions).size(); i++) {
             if (!checkInput(numberOfExpressions).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on number of expressions: " + checkInput(numberOfExpressions).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(numberOfExpressions).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on number of expressions: " + checkInput(numberOfExpressions).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -382,7 +384,7 @@ public class Adaptor extends HttpServlet {
 
         //4.2.5 Verifying radio box for int/double
         if (intResult == null && doubleResult == null) {
-            errorsList.add("Error #" + errorCounter + " on result type: " + "empty input");
+            errorsList.add("<br> <b>Error #" + errorCounter + "</b> on result type: " + "empty input");
             repeatIntake = true;
             errorCounter++;
         }
@@ -391,13 +393,13 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(resultMin).size(); i++) {
             if (!checkInput(resultMin).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(resultMin).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on minimum range result: " + checkInput(resultMin).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
 
             if (checkInput(resultMin).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on minimum range result: " + checkInput(resultMin).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on minimum range result: " + checkInput(resultMin).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
@@ -407,12 +409,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(resultMax).size(); i++) {
             if (!checkInput(resultMax).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(resultMax).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on maximum range result: " + checkInput(resultMax).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(resultMax).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on maximum range result: " + checkInput(resultMax).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on maximum range result: " + checkInput(resultMax).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -423,7 +425,7 @@ public class Adaptor extends HttpServlet {
                     && subtract == null
                     && multiply == null
                     && divide == null) {
-                errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on operators: " + "empty input");
                 repeatIntake = true;
                 errorCounter++;
             }
@@ -448,14 +450,17 @@ public class Adaptor extends HttpServlet {
                         Double.parseDouble(resultMax));
                 quizzes.add(resultRangeQuiz);
                 Generator.generateAllExpressions();
-                Generator.generateAllExpressionsAndResults();
+                Generator.concatenateExpressionsAndResults();
+                resultRangeQuiz.setQuizResultsAndExpressions();
             }
 
             //4.2.11 Check if quiz exists
-            System.out.println(Database.checkIfQuizExists(quizzes.get(0)));
-            if (Database.checkIfQuizExists(quizzes.get(0))) {
-                repeatIntake = true;
-                errorsList.add(Database.errorList.toString());
+            if (!repeatIntake) {
+                if (Database.checkIfQuizExists(quizzes.get(0))) {
+                    repeatIntake = true;
+                    errorsList.add(Database.errorList.toString());
+                    quizzes.clear();
+                }
             }
         }
 
@@ -492,12 +497,12 @@ public class Adaptor extends HttpServlet {
         //4.3.1 Verifying quiz name input - if is empty, repeat intake and save error message
         for (int i = 0; i < checkInput(quizName).size(); i++) {
             if (checkInput(quizName).get(i).equals("empty input")) {
-                errorsList.add("Error #" + errorCounter + " on quiz name: " + checkInput(quizName).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on quiz name: " + checkInput(quizName).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(quizName).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on quizName: " + checkInput(quizName).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on quizName: " + checkInput(quizName).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
@@ -508,12 +513,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(highestNumber).size(); i++) {
             if (!checkInput(highestNumber).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on highest number: " + checkInput(highestNumber).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(highestNumber).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on highest number: " + checkInput(highestNumber).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on highest number: " + checkInput(highestNumber).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -524,12 +529,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(numbersInExpression).size(); i++) {
             if (!checkInput(numbersInExpression).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on numbers in expression: " + checkInput(numbersInExpression).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on numbers in expression: " + checkInput(numbersInExpression).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(numbersInExpression).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " numbers in expression: " + checkInput(numbersInExpression).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> numbers in expression: " + checkInput(numbersInExpression).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -540,12 +545,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(numberOfExpressions).size(); i++) {
             if (!checkInput(numberOfExpressions).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on number of expressions: " + checkInput(numberOfExpressions).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(numberOfExpressions).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " on number of expressions: " + checkInput(numberOfExpressions).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on number of expressions: " + checkInput(numberOfExpressions).get(i));
                 repeatIntake = true;
                 errorCounter++;
 
@@ -557,12 +562,12 @@ public class Adaptor extends HttpServlet {
         for (int i = 0; i < checkInput(fixedResult).size(); i++) {
             if (!checkInput(fixedResult).get(i).equals("good input")
             ) {
-                errorsList.add("Error #" + errorCounter + " on fixed result: " + checkInput(fixedResult).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> on fixed result: " + checkInput(fixedResult).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
             if (checkInput(fixedResult).get(i).equals("too long")) {
-                errorsList.add("Error #" + errorCounter + " fixed result: " + checkInput(fixedResult).get(i));
+                errorsList.add("<br> <b>Error #" + errorCounter + "</b> fixed result: " + checkInput(fixedResult).get(i));
                 repeatIntake = true;
                 errorCounter++;
             }
@@ -586,23 +591,27 @@ public class Adaptor extends HttpServlet {
                     Double.parseDouble(fixedResult));
             quizzes.add(fixedResultQuiz);
             Generator.generateAllExpressions();
-            Generator.generateAllExpressionsAndResults();
+            Generator.concatenateExpressionsAndResults();
+            fixedResultQuiz.setQuizResultsAndExpressions();
+            System.out.println(quizzes.get(0).getQuizResultsAndExpressions());
         }
 
 
         //4.1.7 Check if quiz exists
-        if (Database.checkIfQuizExists(quizzes.get(0))) {
-            repeatIntake = true;
-            errorsList.add(Database.errorList.toString());
+        if (!repeatIntake) {
+            if (Database.checkIfQuizExists(quizzes.get(0))) {
+                repeatIntake = true;
+                errorsList.add(Database.errorList.toString());
+                quizzes.clear();
+            }
         }
-
 
         //4.3.9 Verifying operators input
         if (add == null
                 && subtract == null
                 && multiply == null
                 && divide == null) {
-            errorsList.add("Error #" + errorCounter + " on operators: " + "empty input");
+            errorsList.add("<br> <b>Error #" + errorCounter + "</b> on operators: " + "empty input");
             repeatIntake = true;
             errorCounter++;
         }
@@ -737,6 +746,7 @@ public class Adaptor extends HttpServlet {
                         break;
                 }
                 break;
+
             case "generateAgain":
 
                 quizType = quizzes.get(0).getQuizType();
@@ -795,8 +805,6 @@ public class Adaptor extends HttpServlet {
                                 quizInput.get(11));
 
 
-
-
                         //4.2.12 Redirect back to resultRangeQuiz if input is invalid
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
@@ -849,6 +857,7 @@ public class Adaptor extends HttpServlet {
                 }
                 break;
             case "saveQuizInDB":
+                System.out.println("Saved");
                 Database.saveInDB(quizzes.get(0));
                 break;
             default:

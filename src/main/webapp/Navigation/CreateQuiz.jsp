@@ -1,4 +1,4 @@
-<%@ page import="Servlets.Adaptor" %><%--
+<%@ page import="Servlets.Driver" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 12.04.2022
@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%Adaptor.resetErrorList();%>
+  <%Driver.resetErrorList();%>
   <meta charset="UTF-8">
   <title>Create your own quiz</title>
 </head>
@@ -21,7 +21,7 @@
 <div></div>
 Only select highest number and number of expressions
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/randomQuiz.jsp"> Random quiz
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/randomQuiz.jsp"> Create quiz
 </button>
 <br>
 <div>
@@ -35,8 +35,7 @@ Only select highest number and number of expressions
 <div></div>
 Select the result range for the quiz, the highest number and number of expressions
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/resultRangeQuiz.jsp"> Result
-  range quiz
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/resultRangeQuiz.jsp"> Create quiz
 </button>
 <br>
 <div>
@@ -51,8 +50,7 @@ Select the result range for the quiz, the highest number and number of expressio
 <div></div>
 Select the fixed result for the expressions in the quiz, the highest number and number of expressions
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/fixedResultQuiz.jsp"> Fixed
-  result quiz
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/fixedResultQuiz.jsp"> Create quiz
 </button>
 <br>
 <div>
@@ -62,9 +60,8 @@ Select the fixed result for the expressions in the quiz, the highest number and 
 
 
 
-<br><b>Back to menu </b>
 <br>
-<button onclick="document.location='Menu.html'"> Back to menu</button>
+<button onclick="document.location='http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html'"> Back </button>
 <br>
 
 <body>
