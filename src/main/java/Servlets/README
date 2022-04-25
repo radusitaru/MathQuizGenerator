@@ -1,3 +1,53 @@
 ******************************************** MathQuizGenerator ******************************************************
 
-1. Application goal:
+1. Application scope:
+
+- Create mathematical quizzes based on user input
+
+2. Application functions:
+
+2.1 Allow user to create 3 types of mathematical quizzes:
+
+ - randomQuiz : allow user to create random quiz based on highest number, operators, numbersInExpression, numberOfExpressions, resultType (int or double)
+ - resultRangeQuiz: allow user to create a quiz that generates expressions that have a result included in a user input range.
+   Moreover, the expressions themselves are generated based on highest number, operators, numbersInExpression, numberOfExpressions, resultType (int or double)
+ - fixedResultQuiz: allow user to create a quiz that generates expressions that have a fixed result, based on user input.
+   Moreover, the expressions themselves are generated based on highest number, operators, numbersInExpression and numberOfExpressions.
+
+ 2.2 Allow user to save quiz details, expressions and results in database
+
+ 2.3 Allow user to load a quiz saved in database.
+
+ 3. Application code structure
+
+ 3.1 The backend of this application is made of 4 java classes, which are servlets. Each servlet is responsible for a different function of the application:
+
+ - Generator: This servlet is responsible for generating the mathematical expressions and results.
+ - Quiz: This servlet is responsible for creating a quiz object, which stores all the information regarding the quiz which is being created.
+         This object is used throughout the whole application as input for other methods.
+ - Database: This servlet is responsible for saving and loading data from and to the database.
+ - Driver: This servlet is responsible for running commands between frontend and backend. To be more specific, it is responsible for reading user input from the frontend,
+           checking for input mistakes, converting input format to desired format that is used in other backend servlets, creating the quiz objects based on user input.
+
+ 3.2 The frontend of this application is made of 3 folders: Navigation, QuizTypes and Results:
+
+ 3.2.1 Navigation: Contains 2 JSP and 1 HTML files. These are the pages used for navigation:
+
+ - Menu: HTML file responsible for directing user to create a quiz or to search an already existing quiz from database.
+ - CreateQuiz: JSP file responsible for the user interface in creating quizzes.
+ - ExistingQuiz: JSP file responsible for user interface in loading quiz from database.
+
+ 3.2.2 QuizTypes:
+
+ - randomQuiz: JSP file responsible for user interface to creating a randomQuiz.
+ - resultRangeQuiz: JSP file responsible for user interface to creating a resultRangeQuiz.
+ - fixedResultQuiz: JSP file responsible for user interface to creating a fixedResultQuiz.
+
+ 3.2.3 Results
+
+ - Results: JSP file responsible for displaying the newly create quiz details.
+ - ExistingQuizResults: JSP file responsible for displaying the quiz details loaded from database.
+
+****************************************************************************************************************************************************************
+
+
