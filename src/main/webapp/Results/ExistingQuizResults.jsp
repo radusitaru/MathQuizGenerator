@@ -1,4 +1,5 @@
-<%@ page import="Servlets.Database" %><%--
+<%@ page import="Servlets.Database" %>
+<%@ page import="Servlets.Driver" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 17.04.2022
@@ -18,7 +19,6 @@
     <h2>
         *********************************************************************************************************************************************************************</h2>
 </head>
-
 </head>
 <b>Quiz name:</b> <%=Database.quizFromDB.get(0).getQuizName()%><br>
 <b>Quiz type:</b> <%=Database.quizFromDB.get(0).getQuizType()%><br>
@@ -27,8 +27,6 @@
 <b>Quiz expressions and results:</b> <br> <%=Database.quizFromDB.get(0).getQuizResultsAndExpressions()%><br>
 
 <body>
-
-<div></div>
 <br>
 <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html" method="POST">
     <input type="hidden" id="command" name="command" value="backToMenu">

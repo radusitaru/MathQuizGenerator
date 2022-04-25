@@ -1,6 +1,7 @@
 <%@ page import="Servlets.Driver" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="java.io.IOException" %><%--
+<%@ page import="java.io.IOException" %>
+<%@ page import="Servlets.ErrorHandling" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 12.04.2022
@@ -21,11 +22,11 @@
     <h2>
         *********************************************************************************************************************************************************************</h2>
     <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
-        quizName: <input type="text" name="quizName" id="quizName"/> </br>
-        highestNumber: <input type="text" name="highestNumber" id="highestNumber"/> </br>
-        numbersInExpression: <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>
-        numberOfExpressions: <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
-        operators:<br>
+        <b>Quiz name:</b> <input type="text" name="quizName" id="quizName"/> </br>
+            <b>Highest number:</b> <input type="text" name="highestNumber" id="highestNumber"/> </br>
+                <b>Numbers in expression:</b> <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>
+                    <b>Number of expressions:</b> <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
+        <b>Operators:</b><br>
         add:
         <input type="checkbox" id="add" name="add" value="add">
         <label for="add"> +</label><br>
@@ -38,10 +39,10 @@
         divide:
         <input type="checkbox" id="divide" name="divide" value="divide">
         <label for="divide"> / </label><br>
-        resultType:
-        <input type="radio" id="Integer1" name="Integer1" value="Integer1">
+        <b> Result type:</b>
+        <input type="checkbox" id="Integer1" name="Integer1" value="Integer1">
         <label for="Integer1">int</label>
-        <input type="radio" id="Double1" name="Double1" value="Double1">
+        <input type="checkbox" id="Double1" name="Double1" value="Double1">
         <label for="Double1">double</label>
         <br>
         <br>
@@ -51,7 +52,7 @@
     </form>
 
 
-    <b>Errors:</b> <%=Driver.errorsList.toString()%>
+    <b>Errors:</b> <%=ErrorHandling.errorsList.toString()%>
 
     <div></div>
     <br>

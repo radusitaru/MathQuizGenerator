@@ -132,10 +132,14 @@ public class Database extends HttpServlet {
         return quizExists;
     }
 
-    //2.3
-    public static void getFromDB(String quizName) {
-
+    //2.3 Get quiz from database
+    public static boolean getFromDB(String quizName) {
+        boolean isInDB=false;
         try {
+
+            //2.3.0 Clearing quizFromDB list
+            quizFromDB.clear();
+
             //2.3.1 Connecting to database
             final String URL = "jdbc:postgresql://localhost/";
             final String USERNAME = "postgres";
@@ -156,6 +160,7 @@ public class Database extends HttpServlet {
             //2.3.5 Execute query as long as there are still items in database: introduce results in quiz object
             while (rs.next()) {
                 if (rs.getString("quizname") != null) {
+                    isInDB=true;
                     pulledQuiz.setQuizName((rs.getString("quizname")));
                     pulledQuiz.setQuizType((rs.getString("quiztype")));
                     pulledQuiz.setQuizId((rs.getString("quizid")));
@@ -173,5 +178,5 @@ public class Database extends HttpServlet {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
+    return isInDB;}
 }

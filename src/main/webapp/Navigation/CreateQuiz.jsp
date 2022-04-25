@@ -1,4 +1,5 @@
-<%@ page import="Servlets.Driver" %><%--
+<%@ page import="Servlets.Driver" %>
+<%@ page import="Servlets.ErrorHandling" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 12.04.2022
@@ -12,7 +13,7 @@
 <html style="background-color:CornSilk;color:Black;text-align:center;" lang="">
 <html lang="">
 <head>
-    <%Driver.resetErrorList();%>
+    <%ErrorHandling.resetErrorList();%>
     <meta charset="UTF-8">
     <title>Create your own quiz</title>
 </head>

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +23,7 @@ public class Generator extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
     }
+
 
     /**
      * --------------------------------------------------------------------------------
@@ -55,7 +57,6 @@ public class Generator extends HttpServlet {
      * --------------------------------------------------------------------------------
      */
 
-
     //2.1 Clear all lists
     static public void clearAllGeneratorLists() {
         numbersList.clear();
@@ -69,16 +70,16 @@ public class Generator extends HttpServlet {
     //2.2 Generating a list of numbers based on a maximum number and a defined list size
     static public void generateNumberList() {
         numbersList.clear();
-        for (int i = 0; i < Driver.quizzes.get(0).getNumbersInExpression(); i++) {
-            numbersList.add(randomGenerator.nextInt(Driver.quizzes.get(0).getHighestNumber()) + 1);
+        for (int i = 0; i < ErrorHandling.quizzes.get(0).getNumbersInExpression(); i++) {
+            numbersList.add(randomGenerator.nextInt(ErrorHandling.quizzes.get(0).getHighestNumber()) + 1);
         }
     }
 
     //2.3 Generating a list of operators based on user input which is the parameter in the method signature
     public static void generateOperatorList() {
         operatorsList.clear();
-        for (int i = 0; i < Driver.inputOperators.size(); i++) {
-            if (Driver.inputOperators.get(i) != null) operatorsList.add(Driver.inputOperators.get(i));
+        for (int i = 0; i < ErrorHandling.inputOperators.size(); i++) {
+            if (ErrorHandling.inputOperators.get(i) != null) operatorsList.add(ErrorHandling.inputOperators.get(i));
         }
     }
 
@@ -100,7 +101,7 @@ public class Generator extends HttpServlet {
 
             //2.4.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter<Driver.quizzes.get(0).getNumbersInExpression(); currentNr++) {
+            for (int currentNr = 0; currentNr < ErrorHandling.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < ErrorHandling.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.4.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -145,11 +146,12 @@ public class Generator extends HttpServlet {
         }
     }
 
+
     //2.5 Generating an expression for resultRangeQuiz
     static void resultRangeExpression(String resultType, double min, double max) {
         boolean stop = false;
 
-        //2.5.1 Opening loop for making sure that the expression generated has the desired result type, int or double
+        //2.5.3 Opening loop for making sure that the expression generated has the desired result type, int or double
         do {
 
             //2.5.2 Clearing the list containing one expression to leave only the newly generated one
@@ -161,12 +163,13 @@ public class Generator extends HttpServlet {
 
             //2.5.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter<Driver.quizzes.get(0).getNumbersInExpression(); currentNr++) {
+            for (int currentNr = 0; currentNr < ErrorHandling.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < ErrorHandling.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.5.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
                     nrCounter++;
                 } else
+
                     oneExpression.add(operatorsList.get(randomGenerator.nextInt(operatorsList.size())));
             }
 
@@ -225,7 +228,7 @@ public class Generator extends HttpServlet {
 
             //2.6.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter<Driver.quizzes.get(0).getNumbersInExpression(); currentNr++) {
+            for (int currentNr = 0; currentNr <ErrorHandling.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < ErrorHandling.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.6.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -283,24 +286,24 @@ public class Generator extends HttpServlet {
     static public String generateAllExpressions() {
         clearAllGeneratorLists();
 
-        for (int i = 0; i < Driver.quizzes.get(0).getNumberOfExpressions(); i++) {
+        for (int i = 0; i < ErrorHandling.quizzes.get(0).getNumberOfExpressions(); i++) {
 
             //2.9.1 Generating numbers and operators
             generateNumberList();
             generateOperatorList();
 
             //2.9.2 Generating correct expressions based on quiz type
-            switch (Driver.quizzes.get(0).getQuizType()) {
+            switch (ErrorHandling.quizzes.get(0).getQuizType()) {
                 case "randomQuiz":
-                    randomExpression(Driver.quizzes.get(0).getResultType());
+                    randomExpression(ErrorHandling.quizzes.get(0).getResultType());
                     break;
 
                 case "fixedResultQuiz":
-                    fixedResultExpression(Driver.quizzes.get(0).getFixedResult());
+                    fixedResultExpression(ErrorHandling.quizzes.get(0).getFixedResult());
                     break;
 
                 case "resultRangeQuiz":
-                    resultRangeExpression(Driver.quizzes.get(0).getResultType(), Driver.quizzes.get(0).getResultMin(), Driver.quizzes.get(0).getResultMax());
+                    resultRangeExpression(ErrorHandling.quizzes.get(0).getResultType(), ErrorHandling.quizzes.get(0).getResultMin(), ErrorHandling.quizzes.get(0).getResultMax());
                     break;
             }
 

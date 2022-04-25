@@ -2,6 +2,7 @@
 <%@ page import="static Servlets.Generator.generateAllExpressions" %>
 <%@ page import="Servlets.Driver" %>
 <%@ page import="static Servlets.Generator.allExpressionsAndResults" %>
+<%@ page import="Servlets.ErrorHandling" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--
   Created by IntelliJ IDEA.
@@ -22,10 +23,10 @@
         *********************************************************************************************************************************************************************</h2>
 
     <h3>Quiz name:</h3>
-    <b><%=Driver.quizzes.get(0).getQuizName()%>
+    <b><%=ErrorHandling.quizzes.get(0).getQuizName()%>
     </b> <br>
     <h3>Quiz type:</h3>
-    <b><%=Driver.quizzes.get(0).getQuizType()%>
+    <b><%=ErrorHandling.quizzes.get(0).getQuizType()%>
     </b>
     <br>
     <br>

@@ -1,4 +1,6 @@
-<%@ page import="Servlets.Database" %><%--
+<%@ page import="Servlets.Database" %>
+<%@ page import="Servlets.Driver" %>
+<%@ page import="Servlets.ErrorHandling" %><%--
   Created by IntelliJ IDEA.
   User: radus
   Date: 12.04.2022
@@ -19,8 +21,8 @@
 <br>
 <br>
 <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
-    quizName*: <input type="text" name="quizName" id="quizName"/>  </br>
     <input type="hidden" id="command" name="command" value="dbQuizName">
+    quizName: <input type="text" name="quizName" id="quizName"/>  </br>
     <br>
     <input type="submit" value="Search"/>
 </form>
@@ -30,6 +32,8 @@
     <input type="hidden" id="command" name="command" value="backToMenu">
     <input type="submit" value="Back"/>
 </form>
+<br>
+<b>Errors:</b> <%=ErrorHandling.errorsList.toString()%>
 <br>
 <h2>
     *********************************************************************************************************************************************************************</h2>
