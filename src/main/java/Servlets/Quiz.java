@@ -63,7 +63,7 @@ public class Quiz extends HttpServlet {
         setParameters(operatorsList.toString()+highestNumber+numbersInExpression+numberOfExpressions+resultType+getQuizType());
     }
 
-    //2.2 Quiz type: fixedResultQuiz - double
+    //2.2 Quiz type: fixedResultQuiz
     public Quiz(String quizName,List<String> operatorsList, int highestNumber, int numbersInExpression, int numberOfExpressions, double fixedResult) {
         setQuizName(quizName);
         setOperatorsList(operatorsList);

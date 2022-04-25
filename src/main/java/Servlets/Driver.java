@@ -13,6 +13,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Servlets.Database.getFromDB;
+
 
 @WebServlet("/Driver")
 public class Driver extends HttpServlet {
@@ -261,7 +263,7 @@ public class Driver extends HttpServlet {
                     inputOperators,
                     Integer.parseInt(highestNumber),
                     Integer.parseInt(numbersInExpression),
-                    Integer.parseInt(numbersInExpression),
+                    Integer.parseInt(numberOfExpressions),
                     resultType);
             quizzes.add(randomQuiz);
             Generator.generateAllExpressions();
@@ -593,7 +595,6 @@ public class Driver extends HttpServlet {
             Generator.generateAllExpressions();
             Generator.concatenateExpressionsAndResults();
             fixedResultQuiz.setQuizResultsAndExpressions();
-            System.out.println(quizzes.get(0).getQuizResultsAndExpressions());
         }
 
 
@@ -636,25 +637,36 @@ public class Driver extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
-        //Get the positions of the errors
+        //5. Get error position and reset lists of errors
         getErrorPosition();
-
-        //Reset error list
         resetErrorList();
 
+        //6. Command processes
 
+        //6.1 Receiving command parameter
         switch (req.getParameter("command")) {
+
+
+            //6.2 Generating new quiz
             case "generateQuiz":
-                //3. Fetching quiz type
+
+                //6.2.1 Fetching quiz type
                 quizType = req.getParameter("quizType");
 
-
-                //4. Determining quiz type
+                //6.2.2 Determining quiz type
                 switch (quizType) {
 
-                    //4.1 Verifying random quiz input
+
+                    //6.2.2.1 Verifying user input and generating random quiz
                     case "randomQuiz":
 
+                        //6.2.2.1.1 Resetting values for each iteration
+                        repeatIntake = false;
+                        resetErrorList();
+                        resetQuizzesList();
+                        Generator.clearAllGeneratorLists();
+
+                        //6.2.2.1.2 Checking user input and generating quiz
                         checkInputAndGenerateRandomQuiz(req.getParameter("quizName"),
                                 req.getParameter("highestNumber"),
                                 req.getParameter("numbersInExpression"),
@@ -666,7 +678,7 @@ public class Driver extends HttpServlet {
                                 req.getParameter("multiply"),
                                 req.getParameter("divide"));
 
-                        //4.1.10 Redirect back to randomQuiz of input is invalid
+                        //6.2.2.1.3 If user input is incorrect, repeat input intake
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
                             try {
@@ -677,13 +689,30 @@ public class Driver extends HttpServlet {
                                 e.printStackTrace();
                             }
                         }
+
+                        //6.2.2.1.4 Redirect to results page once command is completed
+                        else {
+                            RequestDispatcher rd5 = req.getRequestDispatcher("/Results/Results.jsp");
+                            try {
+                                rd5.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
 
-                    //4.2 Verifying resultRangeQuiz
+                    //6.2.2.2 Verifying user input and generating ResultRangeQuiz
                     case "resultRangeQuiz":
+
+                        //6.2.2.2.1 Resetting values
                         repeatIntake = false;
                         resetErrorList();
+                        resetQuizzesList();
+                        Generator.clearAllGeneratorLists();
 
+                        //6.2.2.2.2 Checking user input and generating quiz
                         checkInputAndGenerateResultRangeQuiz(
                                 req.getParameter("quizName"),
                                 req.getParameter("highestNumber"),
@@ -698,7 +727,7 @@ public class Driver extends HttpServlet {
                                 req.getParameter("multiply"),
                                 req.getParameter("divide"));
 
-                        //4.2.12 Redirect back to resultRangeQuiz if input is invalid
+                        //6.2.2.2.3 If user input is incorrect, repeat input intake
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
                             try {
@@ -709,15 +738,30 @@ public class Driver extends HttpServlet {
                                 e.printStackTrace();
                             }
                         }
-                        break;
 
+                        //6.2.2.2.4 Redirect to results page once command is completed
+                        else {
+                            RequestDispatcher rd5 = req.getRequestDispatcher("/Results/Results.jsp");
+                            try {
+                                rd5.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
 
-                    //4.3 Verifying fixedResultQuiz
+                        //6.2.2.3 Verifying fixedResultQuiz
                     case "fixedResultQuiz":
 
+                        //6.2.2.3.1 Resetting values for each iteration
                         repeatIntake = false;
                         resetErrorList();
+                        resetQuizzesList();
+                        Generator.clearAllGeneratorLists();
 
+                        //6.2.2.3.2 Checking user input and generating quiz
                         checkInputAndGenerateFixedResultQuiz(req.getParameter("quizName"),
                                 req.getParameter("highestNumber"),
                                 req.getParameter("numbersInExpression"),
@@ -728,12 +772,26 @@ public class Driver extends HttpServlet {
                                 req.getParameter("multiply"),
                                 req.getParameter("divide"));
 
+                        System.out.println(quizzes.get(0).getQuizName());
 
-                        //4.3.10 Redirect back to randomQuiz of input is invalid
+
+                        //6.2.2.3.3 If user input is incorrect, repeat input intake
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
                             try {
                                 rd.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        //6.2.2.3.4 Redirect to results page once command is completed
+                        else {
+                            RequestDispatcher rd6 = req.getRequestDispatcher("/Results/Results.jsp");
+                            try {
+                                rd6.forward(req, resp);
                             } catch (ServletException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -747,19 +805,28 @@ public class Driver extends HttpServlet {
                 }
                 break;
 
+            //6.3 Generating new quiz based on same input
             case "generateAgain":
 
+                //6.3.1 Get quizType from previous input
                 quizType = quizzes.get(0).getQuizType();
 
+                //6.3.2 Clearing lists so that details from previous generation are deleted
+                resetQuizzesList();
+                Generator.clearAllGeneratorLists();
+
+                //6.3.3 Select quizType based on previous quizType
                 switch (quizType) {
 
-                    //4.1 Verifying random quiz input
+                    //6.3.3.1 Generate randomQuiz based on previous quizType
                     case "randomQuiz":
 
+                        //6.3.3.1.1 Reset values and lists
                         resetErrorList();
                         resetQuizzesList();
                         Generator.clearAllGeneratorLists();
 
+                        //6.3.3.1.2 Generate new quiz based on previous quizType
                         checkInputAndGenerateRandomQuiz(quizInput.get(0),
                                 quizInput.get(1),
                                 quizInput.get(2),
@@ -771,7 +838,8 @@ public class Driver extends HttpServlet {
                                 quizInput.get(8),
                                 quizInput.get(9));
 
-                        //4.1.10 Redirect back to randomQuiz of input is invalid
+
+                        //6.3.3.1.3 Redirect back to randomQuiz if input is invalid
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/randomQuiz.jsp");
                             try {
@@ -782,15 +850,30 @@ public class Driver extends HttpServlet {
                                 e.printStackTrace();
                             }
                         }
+
+                        //6.3.3.1.4 Redirect to results page once command is completed
+                        else {
+                            RequestDispatcher rd6 = req.getRequestDispatcher("/Results/Results.jsp");
+                            try {
+                                rd6.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
 
-                    //4.2 Verifying resultRangeQuiz
+                    //6.3.3.2 Verifying resultRangeQuiz
                     case "resultRangeQuiz":
+
+                        //6.3.3.2.1 Reset values and lists
                         repeatIntake = false;
                         resetErrorList();
                         resetQuizzesList();
                         Generator.clearAllGeneratorLists();
 
+                        //6.3.3.2.2 Generate new quiz based on previous quizType
                         checkInputAndGenerateResultRangeQuiz(quizInput.get(0),
                                 quizInput.get(1),
                                 quizInput.get(2),
@@ -803,9 +886,9 @@ public class Driver extends HttpServlet {
                                 quizInput.get(9),
                                 quizInput.get(10),
                                 quizInput.get(11));
+                        errorsList.clear();
 
-
-                        //4.2.12 Redirect back to resultRangeQuiz if input is invalid
+                        //6.3.3.2.3 Redirect back to randomQuiz if input is invalid
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/resultRangeQuiz.jsp");
                             try {
@@ -816,17 +899,31 @@ public class Driver extends HttpServlet {
                                 e.printStackTrace();
                             }
                         }
+
+                        //6.3.3.2.4 Redirect to results page once command is completed
+                        else {
+                            RequestDispatcher rd6 = req.getRequestDispatcher("/Results/Results.jsp");
+                            try {
+                                rd6.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
 
 
-                    //4.3 Verifying fixedResultQuiz
+                    //6.3.3.3 Verifying fixedResultQuiz
                     case "fixedResultQuiz":
 
+                        //6.3.3.3.1 Reset values and lists
                         repeatIntake = false;
                         resetErrorList();
                         resetQuizzesList();
                         Generator.clearAllGeneratorLists();
 
+                        //6.3.3.3.2 Generate new quiz based on previous quizType
                         checkInputAndGenerateFixedResultQuiz(quizInput.get(0),
                                 quizInput.get(1),
                                 quizInput.get(2),
@@ -836,9 +933,9 @@ public class Driver extends HttpServlet {
                                 quizInput.get(6),
                                 quizInput.get(7),
                                 quizInput.get(8));
+                        errorsList.clear();
 
-
-                        //4.3.10 Redirect back to randomQuiz of input is invalid
+                        //6.3.3.3.3 Redirect back to randomQuiz if input is invalid
                         if (repeatIntake) {
                             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/fixedResultQuiz.jsp");
                             try {
@@ -850,29 +947,75 @@ public class Driver extends HttpServlet {
                             }
                         }
 
+                        //6.3.3.3.4 Redirect to results page once command is completed
+                        else {
+                            RequestDispatcher rd6 = req.getRequestDispatcher("/Results/Results.jsp");
+                            try {
+                                rd6.forward(req, resp);
+                            } catch (ServletException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
 
                     default:
                         break;
                 }
                 break;
+
+            //6.4 Save quiz in database
             case "saveQuizInDB":
-                System.out.println("Saved");
-                Database.saveInDB(quizzes.get(0));
+
+                    Database.saveInDB(quizzes.get(0));
+                    //6.4.2
+                    RequestDispatcher rd = req.getRequestDispatcher("/Results/SavedQuiz.jsp");
+                    try {
+                        rd.forward(req, resp);
+                    } catch (ServletException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 break;
+
+            //6.5 Back to menu
+            case "backToMenu":
+
+                //6.5.1 Reset quiz & expression lists
+                resetQuizzesList();
+                Generator.clearAllGeneratorLists();
+
+                //6.5.2 Redirect back to Menu
+                RequestDispatcher rd7 = req.getRequestDispatcher("/Navigation/Menu.html");
+                try {
+                    rd7.forward(req, resp);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            //6.6 Get results quiz from database:
+            case "dbQuizName":
+
+                //6.6.1 Pulling quiz fromDB
+                getFromDB(req.getParameter("quizName"));
+
+                //6.6.2 Redirect to results page once commands are completed and
+                RequestDispatcher rd4 = req.getRequestDispatcher("/Results/ExistingQuizResults.jsp");
+                try {
+                    rd4.forward(req, resp);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             default:
                 break;
         }
 
-
-        //redirect to results
-        RequestDispatcher rd = req.getRequestDispatcher("/Results/Results.jsp");
-        try {
-            rd.forward(req, resp);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

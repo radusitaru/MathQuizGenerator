@@ -100,7 +100,7 @@ public class Generator extends HttpServlet {
 
             //2.4.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1; currentNr++) {
+            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter<Driver.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.4.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -161,7 +161,7 @@ public class Generator extends HttpServlet {
 
             //2.5.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1; currentNr++) {
+            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter<Driver.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.5.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -225,7 +225,7 @@ public class Generator extends HttpServlet {
 
             //2.6.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1; currentNr++) {
+            for (int currentNr = 0; currentNr < Driver.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter<Driver.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.6.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));

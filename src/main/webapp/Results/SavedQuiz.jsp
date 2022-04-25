@@ -1,8 +1,8 @@
-<%@ page import="Servlets.Database" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: radus
-  Date: 17.04.2022
-  Time: 18:11
+  Date: 25.04.2022
+  Time: 15:02
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,22 +11,14 @@
 <html style="background-color:CornSilk;color:Black;text-align:center;" lang="">
 <html  lang="">
 <head>
-
-    <title>Existing quiz results</title>
-
-    <h1>Existing quiz results</h1>
-    <h2>
-        *********************************************************************************************************************************************************************</h2>
+    <title>Quiz saved</title>
 </head>
+<h2>
+    *********************************************************************************************************************************************************************</h2>
 
-</head>
-<b>Quiz name:</b> <%=Database.quizFromDB.get(0).getQuizName()%><br>
-<b>Quiz type:</b> <%=Database.quizFromDB.get(0).getQuizType()%><br>
-<b>Quiz date:</b> <%=Database.quizFromDB.get(0).getQuizDate()%><br>
-<b>Quiz parameters:</b> <%=Database.quizFromDB.get(0).getParameters()%><br>
-<b>Quiz expressions and results:</b> <br> <%=Database.quizFromDB.get(0).getQuizResultsAndExpressions()%><br>
+<h1> Quiz saved!</h1>
 
-<body>
+<br>
 
 <div></div>
 <br>
@@ -35,7 +27,9 @@
     <input type="submit" value="Back to Menu"/>
 </form>
 <br>
+<body>
 <h2>
     *********************************************************************************************************************************************************************</h2>
+
 </body>
 </html>

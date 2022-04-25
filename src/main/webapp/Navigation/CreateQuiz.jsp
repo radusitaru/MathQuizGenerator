@@ -8,20 +8,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
+<html lang="en" xmlns:color="http://www.w3.org/1999/xhtml">
+<html style="background-color:CornSilk;color:Black;text-align:center;" lang="">
+<html lang="">
 <head>
-  <%Driver.resetErrorList();%>
-  <meta charset="UTF-8">
-  <title>Create your own quiz</title>
+    <%Driver.resetErrorList();%>
+    <meta charset="UTF-8">
+    <title>Create your own quiz</title>
 </head>
-<b>Select one of the below quiz models:</b>
-<div>
-</div>
-<br>
-<b>Model 1: Random quiz </b>
+<title>Application details</title>
+<h1>Quiz type</h1>
+<h2>
+    *********************************************************************************************************************************************************************</h2>
+<h3><b>Model 1: Random quiz </b></h3>
 <div></div>
-Only select highest number and number of expressions
+Generates quiz with expressions that have random results
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/randomQuiz.jsp"> Create quiz
+<br>
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/randomQuiz.jsp">
+    Create quiz
 </button>
 <br>
 <div>
@@ -29,13 +34,14 @@ Only select highest number and number of expressions
 <br>
 
 
-
 <br>
-<b>Model 2: Result range quiz </b>
+<h3><b>Model 2: Result range quiz </b></h3>
 <div></div>
-Select the result range for the quiz, the highest number and number of expressions
+Generates quiz with expressions with results within a selected range
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/resultRangeQuiz.jsp"> Create quiz
+<br>
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/resultRangeQuiz.jsp">
+    Create quiz
 </button>
 <br>
 <div>
@@ -43,14 +49,14 @@ Select the result range for the quiz, the highest number and number of expressio
 <br>
 
 
-
-
 <br>
-<b>Model 3: Fixed result quiz </b>
+<h3><b>Model 3: Fixed result quiz </b></h3>
 <div></div>
-Select the fixed result for the expressions in the quiz, the highest number and number of expressions
+Generates quiz containing expressions that have the same result
 <br>
-<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/fixedResultQuiz.jsp"> Create quiz
+<br>
+<button onclick=document.location="http://localhost:8080/MathQuizGenerator_war_exploded/QuizTypes/fixedResultQuiz.jsp">
+    Create quiz
 </button>
 <br>
 <div>
@@ -58,13 +64,14 @@ Select the fixed result for the expressions in the quiz, the highest number and 
 <br>
 
 
-
-
 <br>
-<button onclick="document.location='http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html'"> Back </button>
+<form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html" method="POST">
+    <input type="hidden" id="command" name="command" value="backToMenu">
+    <input type="submit" value="Back"/>
+</form>
 <br>
 
 <body>
-
+<h2>*********************************************************************************************************************************************************************</h2>
 </body>
 </html>
