@@ -41,9 +41,7 @@ public class Driver extends HttpServlet {
                     RequestDispatcher rd1 = req.getRequestDispatcher("/Results/Results.jsp");
                     try {
                         rd1.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ServletException | IOException e) {
                         e.printStackTrace();
                     }
                     break;
@@ -59,9 +57,7 @@ public class Driver extends HttpServlet {
                     RequestDispatcher rd6 = req.getRequestDispatcher("/Results/Results.jsp");
                     try {
                         rd6.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ServletException | IOException e) {
                         e.printStackTrace();
                     }
                     break;
@@ -81,9 +77,7 @@ public class Driver extends HttpServlet {
                     RequestDispatcher rd = req.getRequestDispatcher("/Results/SavedQuiz.jsp");
                     try {
                         rd.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ServletException | IOException e) {
                         e.printStackTrace();
                     }
 
@@ -100,9 +94,7 @@ public class Driver extends HttpServlet {
                     RequestDispatcher rd7 = req.getRequestDispatcher("/Navigation/Menu.html");
                     try {
                         rd7.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ServletException | IOException e) {
                         e.printStackTrace();
                     }
                     break;
@@ -111,24 +103,20 @@ public class Driver extends HttpServlet {
                 case "dbQuizName":
 
                     //2.2.3.1 Pulling quiz fromDB
-                    if (getFromDB(req.getParameter("quizName")) == true) {
+                    if (getFromDB(req.getParameter("quizName"))) {
 
                         //2.2.3.2 Redirect to results page once commands are completed and
                         RequestDispatcher rd9 = req.getRequestDispatcher("/Results/ExistingQuizResults.jsp");
                         try {
                             rd9.forward(req, resp);
-                        } catch (ServletException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
+                        } catch (ServletException | IOException e) {
                             e.printStackTrace();
                         }
                     } else ErrorHandling.errorsList.add("<b>Error #1: No such quiz in database, try again");
                     RequestDispatcher rd4 = req.getRequestDispatcher("/Navigation/ExistingQuiz.jsp");
                     try {
                         rd4.forward(req, resp);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ServletException | IOException e) {
                         e.printStackTrace();
                     }
                     break;

@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +21,23 @@ public class ErrorHandling extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
+
         //Check and save errors
         checkAndSaveErrors();
-        System.out.println(incorrectInput);
 
         //If user input is incorrect, repeat intake
         if (incorrectInput) {
             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/" + DataCollection.quizInput.get(0) + ".jsp");
             try {
                 rd.forward(req, resp);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
         } else {
             RequestDispatcher rd2 = req.getRequestDispatcher("/Driver");
             try {
                 rd2.forward(req, resp);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -64,6 +61,7 @@ public class ErrorHandling extends HttpServlet {
     public static boolean isEmptyInput = true;
     public static boolean isTooLong = false;
     public static boolean isDouble = false;
+    public static boolean isEmptyName = false;
 
     //1.3 Lists
     public static List<String> errorsList = new ArrayList<>();
@@ -121,8 +119,7 @@ public class ErrorHandling extends HttpServlet {
 
             //2.1.9 Checking if input is too long (max 40 characters)
             if (userInput.length() > 40) isTooLong = true;
-        }
-        else isEmptyInput=true;
+        } else isEmptyInput = true;
     }
 
     //2.2 Chneck result type
@@ -162,10 +159,9 @@ public class ErrorHandling extends HttpServlet {
     }
 
     //2.4 Check quiz name
-    public static void checkQuizName(String userInput) {
-
-        if (Objects.equals(userInput, "")) {
-            isEmptyInput = true;
+    public static void checkQuizName(String quizNameInput) {
+        if (quizNameInput==null) {
+            isEmptyName = true;
         }
     }
 
@@ -173,8 +169,7 @@ public class ErrorHandling extends HttpServlet {
     public static void checkAndSaveErrors() {
 
         //2.5.1 clearing error list
-        errorsList.clear();
-        errorCounter = 1;
+        resetErrorList();
 
         //2.5.2 Running all checks for each quiz type
         switch (DataCollection.quizInput.get(0)) {
@@ -259,6 +254,12 @@ public class ErrorHandling extends HttpServlet {
             incorrectInput = true;
             isEmptyInput = false;
         }
+        if (isEmptyName) {
+            errorsList.add("<br> <b>Error #" + errorCounter + "</b> " + parameter + ": " + "empty quizName");
+            errorCounter++;
+            incorrectInput = true;
+            isEmptyName = false;
+        }
         if (isTooLong) {
             errorsList.add("<br> <b>Error #" + errorCounter + "</b> " + parameter + ": " + "input is too long");
             errorCounter++;
@@ -272,12 +273,9 @@ public class ErrorHandling extends HttpServlet {
             isDouble = false;
         }
     }
-
     //2.7 Reset errors list
     static public void resetErrorList() {
         errorsList.clear();
         errorCounter = 1;
     }
-
-
 }

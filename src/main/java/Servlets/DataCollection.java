@@ -86,9 +86,7 @@ public class DataCollection extends HttpServlet {
             RequestDispatcher rd = req.getRequestDispatcher("/ErrorHandling");
             try {
                 rd.forward(req, resp);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
 
@@ -102,9 +100,7 @@ public class DataCollection extends HttpServlet {
             RequestDispatcher rd = req.getRequestDispatcher("/Driver");
             try {
                 rd.forward(req, resp);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
 
@@ -120,9 +116,7 @@ public class DataCollection extends HttpServlet {
             RequestDispatcher rd = req.getRequestDispatcher("/Driver");
             try {
                 rd.forward(req, resp);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
         }
