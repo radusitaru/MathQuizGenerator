@@ -21,11 +21,16 @@ public class ErrorHandling extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
 
+        /**
+         * --------------------------------------------------------------------------------
+         * 1. Handling errors
+         * --------------------------------------------------------------------------------
+         */
 
-        //Check and save errors
+        //1.1 Check and save errors
         checkAndSaveErrors();
 
-        //If user input is incorrect, repeat intake
+        //1.2 If user input is incorrect, repeat intake
         if (incorrectInput) {
             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/" + DataCollection.quizInput.get(0) + ".jsp");
             try {
@@ -33,7 +38,10 @@ public class ErrorHandling extends HttpServlet {
             } catch (ServletException | IOException e) {
                 e.printStackTrace();
             }
-        } else {
+        }
+
+        //1.3 If user input is correct, redirect to Driver servlet
+        else {
             RequestDispatcher rd2 = req.getRequestDispatcher("/Driver");
             try {
                 rd2.forward(req, resp);
@@ -45,12 +53,12 @@ public class ErrorHandling extends HttpServlet {
 
     /**
      * --------------------------------------------------------------------------------
-     * 1. Variables
+     * 2. Variables
      * --------------------------------------------------------------------------------
      */
 
 
-    //1.1 Primitive variables
+    //2.1 Primitive variables
     public static int errorCounter = 1;
     public static boolean incorrectInput = false;
     public static boolean isDotFirst = false;
@@ -63,47 +71,47 @@ public class ErrorHandling extends HttpServlet {
     public static boolean isDouble = false;
     public static boolean isEmptyName = false;
 
-    //1.3 Lists
+    //2.3 Lists
     public static List<String> errorsList = new ArrayList<>();
     public static List<String> inputOperators = new ArrayList<>();
 
     /**
      * --------------------------------------------------------------------------------
-     * 2. Methods
+     * 3. Methods
      * --------------------------------------------------------------------------------
      */
 
-    //2.1 Check number input
+    //3.1 Check number input
     public static void checkNumbers(String userInput) {
 
-        //2.1.1  Method variables
+        //3.1.1  Method variables
         int dotCounter = 0;
         int firstChar;
         int nextChar = 1;
 
-        //2.1.2 Method calls & objects
+        //3.1.2 Method calls & objects
         Pattern lettersPattern = Pattern.compile("\\D", Pattern.CASE_INSENSITIVE);
         Matcher matcher;
 
-        //2.1.3 Checking if input is empty - continuing only if input is not empty
+        //3.1.3 Checking if input is empty - continuing only if input is not empty
         if (!Objects.equals(userInput, "")) {
             isEmptyInput = false;
 
 
-            //2.1.4 Determining whether input is non-digit & non-dot
+            //3.1.4 Determining whether input is non-digit & non-dot
             for (firstChar = 0; firstChar < userInput.length(); firstChar++, nextChar++) {
 
-                //2.1.5 Initializing matcher & isStringChar boolean
+                //3.1.5 Initializing matcher & isStringChar boolean
                 matcher = lettersPattern.matcher(userInput.substring(firstChar, nextChar));
                 isStringChar = matcher.find();
 
 
-                //2.1.6 If input is anything besides digits or dots, mark as wrong.
+                //3.1.6 If input is anything besides digits or dots, mark as wrong.
                 if (isStringChar && !userInput.substring(firstChar, nextChar).equals(".")) {
                     isWrongInput = true;
                 }
 
-                //2.1.7 Counting dots, determining whether current char is a multiple dot. If yes, save its position in String
+                //3.1.7 Counting dots, determining whether current char is a multiple dot. If yes, save its position in String
                 if (userInput.substring(firstChar, nextChar).equals(".")) {
                     dotCounter++;
                     if (dotCounter > 1) {
@@ -112,21 +120,20 @@ public class ErrorHandling extends HttpServlet {
                 }
             }
 
-            //2.1.8 Checking if dot is first or last
+            //3.1.8 Checking if dot is first or last
             if (userInput.substring(0, 1).equalsIgnoreCase(".")) isDotFirst = true;
             else if (userInput.substring(userInput.length() - 1, userInput.length()).equalsIgnoreCase("."))
                 isDotLast = true;
 
-            //2.1.9 Checking if input is too long (max 40 characters)
+            //3.1.9 Checking if input is too long (max 40 characters)
             if (userInput.length() > 40) isTooLong = true;
-        }
-        else isEmptyInput=true;
+        } else isEmptyInput = true;
     }
 
-    //2.2 Check result type
+    //3.2 Check result type
     public static void checkResultType(String intResult, String doubleResult) {
 
-        //2.2.1 Verifying check box for int/double
+        //3.2.1 Verifying check box for int/double
         if (intResult == null && doubleResult == null) {
             isEmptyInput = true;
         }
@@ -136,10 +143,10 @@ public class ErrorHandling extends HttpServlet {
         }
     }
 
-    //2.3 Check operators
+    //3.3 Check operators
     public static void checkOperators(String add, String subtract, String multiply, String divide) {
 
-        //2.3.1 Verifying if input is an operator, or if input is empty
+        //3.3.1 Verifying if input is an operator, or if input is empty
         if (add == null
                 && subtract == null
                 && multiply == null
@@ -148,7 +155,7 @@ public class ErrorHandling extends HttpServlet {
 
         }
 
-        //2.3.2 Collecting operators input
+        //3.3.2 Collecting operators input
         if (!incorrectInput) {
             if (add != null) inputOperators.add("+");
             if (subtract != null) inputOperators.add("-");
@@ -157,20 +164,20 @@ public class ErrorHandling extends HttpServlet {
         }
     }
 
-    //2.4 Check quiz name
+    //3.4 Check quiz name
     public static void checkQuizName(String quizNameInput) {
         if (Objects.equals(quizNameInput, "")) {
             isEmptyName = true;
         }
     }
 
-    //2.5 Check and save errors
+    //3.5 Check and save errors
     public static void checkAndSaveErrors() {
 
-        //2.5.1 clearing error list
+        //3.5.1 clearing error list
         resetErrorList();
 
-        //2.5.2 Running all checks for each quiz type
+        //3.5.2 Running all checks for each quiz type
         switch (DataCollection.quizInput.get(0)) {
             case "randomQuiz":
                 checkQuizName(DataCollection.quizInput.get(1));
@@ -220,7 +227,7 @@ public class ErrorHandling extends HttpServlet {
         }
     }
 
-    //2.6 Save errors in errors list
+    //3.6 Save errors in errors list
     public static void saveErrors(String parameter) {
 
         if (isDotFirst) {
@@ -273,10 +280,10 @@ public class ErrorHandling extends HttpServlet {
         }
     }
 
-    //2.7 Reset errors list
+    //3.7 Reset errors list
     static public void resetErrorList() {
         errorsList.clear();
         errorCounter = 1;
-        incorrectInput=false;
+        incorrectInput = false;
     }
 }

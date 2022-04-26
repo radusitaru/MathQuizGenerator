@@ -150,7 +150,7 @@ public class Generator extends HttpServlet {
     static void resultRangeExpression(String resultType, double min, double max) {
         boolean stop = false;
 
-        //2.5.3 Opening loop for making sure that the expression generated has the desired result type, int or double
+        //2.5.1 Opening loop for making sure that the expression generated has the desired result type, int or double
         do {
 
             //2.5.2 Clearing the list containing one expression to leave only the newly generated one
@@ -339,21 +339,21 @@ public class Generator extends HttpServlet {
         return Double.parseDouble(generatedExpressionResult);
     }
 
-    //2.11 Calculating user score
+    //2.13 Calculating user score
     public static double score(double score, double nrOfLevels) {
 
-        //2.11.1 Calculating score out of 100
+        //2.13.1 Calculating score out of 100
         System.out.println("Your score: " + (score / nrOfLevels) * 100);
         return (score / nrOfLevels) * 100;
     }
 
-    //2.12 Getting current time
+    //2.14 Getting current time
     public static LocalTime getTime() {
         return LocalTime.now();
     }
 
 
-    //2.13 Calculating time spent on quiz
+    //2.15 Calculating time spent on quiz
     public static long quizTime(LocalTime endTime, LocalTime startTime) {
         System.out.println("You spent " + ChronoUnit.SECONDS.between(endTime, startTime) + " seconds on completing the quiz");
         return ChronoUnit.SECONDS.between(endTime, startTime);

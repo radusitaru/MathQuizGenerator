@@ -100,8 +100,6 @@ public class Quiz extends HttpServlet {
     public Quiz() {
     }
 
-    //
-
     /**
      * --------------------------------------------------------------------------------
      * 3. Methods

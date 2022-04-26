@@ -34,7 +34,6 @@ public class Database extends HttpServlet {
      * --------------------------------------------------------------------------------
      */
 
-
     //2.1 Saving quiz results and details in the database
     public static void saveInDB(Quiz quiz) {
 
@@ -134,27 +133,27 @@ public class Database extends HttpServlet {
         boolean isInDB=false;
         try {
 
-            //2.3.0 Clearing quizFromDB list
+            //2.3.1 Clearing quizFromDB list
             quizFromDB.clear();
 
-            //2.3.1 Connecting to database
+            //2.3.2 Connecting to database
             final String URL = "jdbc:postgresql://localhost/";
             final String USERNAME = "postgres";
             final String PASSWORD = System.getenv("PWD");
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
-            //2.3.2 Preparing the query that will extract the data based on quizName
+            //2.3.3 Preparing the query that will extract the data based on quizName
             PreparedStatement pSt = conn.prepareStatement("select quizname, quiztype, quizid, quizdate, quizexpressionsandresults, parameters from quiz WHERE quizname=? ");
             pSt.setString(1, quizName);
 
-            //2.3.3 Execute query
+            //2.3.4 Execute query
             ResultSet rs = pSt.executeQuery();
 
-            //2.3.4 Create quiz object in which details from DB will be introduced
+            //2.3.5 Create quiz object in which details from DB will be introduced
             Quiz pulledQuiz = new Quiz();
 
-            //2.3.5 Execute query as long as there are still items in database: introduce results in quiz object
+            //2.3.6 Execute query as long as there are still items in database: introduce results in quiz object
             while (rs.next()) {
                 if (rs.getString("quizname") != null) {
                     isInDB=true;
