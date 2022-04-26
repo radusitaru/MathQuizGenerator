@@ -23,9 +23,9 @@
         *********************************************************************************************************************************************************************</h2>
     <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/DataCollection" method="POST">
         <b>Quiz name:</b> <input type="text" name="quizName" id="quizName"/> </br>
-            <b>Highest number:</b> <input type="text" name="highestNumber" id="highestNumber"/> </br>
-                <b>Numbers in expression:</b> <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>
-                    <b>Number of expressions:</b> <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
+        <b>Highest number:</b> <input type="text" name="highestNumber" id="highestNumber"/> </br>
+        <b>Numbers in expression:</b> <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>
+        <b>Number of expressions:</b> <input type="text" name="numberOfExpressions" id="numberOfExpressions"/> </br>
         <b>Operators:</b><br>
         add:
         <input type="checkbox" id="add" name="add" value="add">

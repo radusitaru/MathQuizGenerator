@@ -84,6 +84,7 @@ public class DataCollection extends HttpServlet {
             }
             //1.2.4 Redirecting to error handling servlet
             RequestDispatcher rd = req.getRequestDispatcher("/ErrorHandling");
+            System.out.println("Goes to error handling");
             try {
                 rd.forward(req, resp);
             } catch (ServletException | IOException e) {

@@ -25,6 +25,9 @@ public class ErrorHandling extends HttpServlet {
         //Check and save errors
         checkAndSaveErrors();
 
+        System.out.println("Error handling incorrect input: ");
+        System.out.println(incorrectInput);
+
         //If user input is incorrect, repeat intake
         if (incorrectInput) {
             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/" + DataCollection.quizInput.get(0) + ".jsp");
@@ -58,7 +61,7 @@ public class ErrorHandling extends HttpServlet {
     public static boolean isMultipleDots = false;
     public static boolean isStringChar;
     public static boolean isWrongInput = false;
-    public static boolean isEmptyInput = true;
+    public static boolean isEmptyInput = false;
     public static boolean isTooLong = false;
     public static boolean isDouble = false;
     public static boolean isEmptyName = false;
@@ -119,22 +122,20 @@ public class ErrorHandling extends HttpServlet {
 
             //2.1.9 Checking if input is too long (max 40 characters)
             if (userInput.length() > 40) isTooLong = true;
-        } else isEmptyInput = true;
+        }
     }
 
-    //2.2 Chneck result type
+    //2.2 Check result type
     public static void checkResultType(String intResult, String doubleResult) {
 
         //2.2.1 Verifying check box for int/double
         if (intResult == null && doubleResult == null) {
             isEmptyInput = true;
-
         }
         if (intResult != null && doubleResult != null) {
             isDouble = true;
 
         }
-
     }
 
     //2.3 Check operators
@@ -160,7 +161,7 @@ public class ErrorHandling extends HttpServlet {
 
     //2.4 Check quiz name
     public static void checkQuizName(String quizNameInput) {
-        if (quizNameInput==null) {
+        if (quizNameInput == null) {
             isEmptyName = true;
         }
     }
@@ -273,6 +274,7 @@ public class ErrorHandling extends HttpServlet {
             isDouble = false;
         }
     }
+
     //2.7 Reset errors list
     static public void resetErrorList() {
         errorsList.clear();
