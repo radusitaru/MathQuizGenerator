@@ -37,6 +37,9 @@
  - Menu: HTML file responsible for directing user to create a quiz or to search an already existing quiz from database.
  - CreateQuiz: JSP file responsible for the user interface in creating quizzes.
  - ExistingQuiz: JSP file responsible for user interface in loading quiz from database.
+ - FutureUpdates: JSP file responsible for informing user about future updates.
+ - Instructions: JSP file responsible for informing user about the application how-to.
+ - ApplicationDetails = JSP file responsible for informing user about application technical details.
 
  3.2.2 QuizTypes:
 

@@ -60,6 +60,9 @@
     database.<br>
     - CreateQuiz: JSP file responsible for the user interface in creating quizzes.<br>
     - ExistingQuiz: JSP file responsible for user interface in loading quiz from database.<br>
+    - FutureUpdates: JSP file responsible for informing user about future updates.<br>
+    - Instructions: JSP file responsible for informing user about the application how-to.<br>
+    - ApplicationDetails = JSP file responsible for informing user about application technical details.<br>
 
     <h4> 3.2.2 QuizTypes:</h4>
 
