@@ -100,9 +100,125 @@ public class Quiz extends HttpServlet {
     public Quiz() {
     }
 
+    //
+
     /**
      * --------------------------------------------------------------------------------
-     * 3. Setters & getters
+     * 3. Methods
+     * --------------------------------------------------------------------------------
+     */
+
+
+    //3.1 Generating quiz
+    static public void generateQuiz() {
+
+        ErrorHandling.resetErrorList();
+        String resultType;
+
+        //3.1.1 Collecting result type
+
+
+        switch (DataCollection.quizInput.get(0)) {
+
+            case "randomQuiz":
+
+                //3.1.2 Check if quiz exists
+                if (!ErrorHandling.incorrectInput) {
+                    if (Database.checkIfQuizExists(DataCollection.quizInput.get(1))) {
+                        ErrorHandling.incorrectInput = true;
+                        ErrorHandling.errorsList.add(Database.errorList.toString());
+                        quizzes.clear();
+                    }
+                }
+
+                //3.1.3 Defining resultType
+                if (DataCollection.quizInput.get(5) == null) resultType = DataCollection.quizInput.get(6);
+                else resultType = DataCollection.quizInput.get(5);
+
+                //3.1.4 Create quiz object if user input contains no errors
+                if (!ErrorHandling.incorrectInput) {
+                    resetQuizzesList();
+                    Quiz randomQuiz = new Quiz(DataCollection.quizInput.get(1),
+                            ErrorHandling.inputOperators,
+                            Integer.parseInt(DataCollection.quizInput.get(2)),
+                            Integer.parseInt(DataCollection.quizInput.get(3)),
+                            Integer.parseInt(DataCollection.quizInput.get(4)),
+                            resultType);
+                    quizzes.add(randomQuiz);
+                    Generator.generateAllExpressions();
+                    Generator.concatenateExpressionsAndResults();
+                    randomQuiz.setQuizResultsAndExpressions();
+
+                    break;
+                }
+            case "resultRangeQuiz":
+
+                //3.1.5 Check if quiz exists
+                if (!ErrorHandling.incorrectInput) {
+                    if (Database.checkIfQuizExists(DataCollection.quizInput.get(1))) {
+                        ErrorHandling.incorrectInput = true;
+                        ErrorHandling.errorsList.add(Database.errorList.toString());
+                        quizzes.clear();
+                    }
+                }
+
+                //3.1.6 Defining resultType
+                if (DataCollection.quizInput.get(5) == null) resultType = DataCollection.quizInput.get(6);
+                else resultType = DataCollection.quizInput.get(5);
+
+                //3.1.7 Create quiz object if user input contains no errors
+                if (!ErrorHandling.incorrectInput) {
+                    resetQuizzesList();
+                    Quiz resultRangeQuiz = new Quiz(DataCollection.quizInput.get(1),
+                            ErrorHandling.inputOperators,
+                            Integer.parseInt(DataCollection.quizInput.get(2)),
+                            Integer.parseInt(DataCollection.quizInput.get(3)),
+                            Integer.parseInt(DataCollection.quizInput.get(4)),
+                            resultType,
+                            Integer.parseInt(DataCollection.quizInput.get(7)),
+                            Integer.parseInt(DataCollection.quizInput.get(8)));
+                    quizzes.add(resultRangeQuiz);
+                    Generator.generateAllExpressions();
+                    Generator.concatenateExpressionsAndResults();
+                    resultRangeQuiz.setQuizResultsAndExpressions();
+                    break;
+                }
+            case "fixedResultQuiz":
+
+                //3.1.8 Check if quiz exists
+                if (!ErrorHandling.incorrectInput) {
+                    if (Database.checkIfQuizExists(DataCollection.quizInput.get(1))) {
+                        ErrorHandling.incorrectInput = true;
+                        ErrorHandling.errorsList.add(Database.errorList.toString());
+                        quizzes.clear();
+                    }
+                }
+
+                //3.1.9 Defining resultType
+                if (DataCollection.quizInput.get(5) == null) resultType = DataCollection.quizInput.get(6);
+                else resultType = DataCollection.quizInput.get(5);
+
+                //3.1.10 Create quiz object if user input contains no errors
+                if (!ErrorHandling.incorrectInput) {
+                    resetQuizzesList();
+                    Quiz fixedResultQuiz = new Quiz(DataCollection.quizInput.get(1),
+                            ErrorHandling.inputOperators,
+                            Integer.parseInt(DataCollection.quizInput.get(2)),
+                            Integer.parseInt(DataCollection.quizInput.get(3)),
+                            Integer.parseInt(DataCollection.quizInput.get(4)),
+                            Integer.parseInt(DataCollection.quizInput.get(5)));
+                    quizzes.add(fixedResultQuiz);
+                    Generator.generateAllExpressions();
+                    Generator.concatenateExpressionsAndResults();
+                    fixedResultQuiz.setQuizResultsAndExpressions();
+                    break;
+                }
+        }
+    }
+
+    /**
+     * --------------------------------------------------------------------------------
+     * 4. Setters & getters
      * --------------------------------------------------------------------------------
      */
 
@@ -224,115 +340,7 @@ public class Quiz extends HttpServlet {
     public void setQuizResultsAndExpressions(String expressionAndResults) {
         this.quizResultsAndExpressions = expressionAndResults;
     }
-
-
     static public void resetQuizzesList() {
         quizzes.clear();
-    }
-
-    static public void generateQuiz() {
-
-        ErrorHandling.resetErrorList();
-        String resultType;
-
-        //Collecting result type
-
-
-        switch (DataCollection.quizInput.get(0)) {
-
-            case "randomQuiz":
-
-                //4.1.9 Check if quiz exists
-                if (!ErrorHandling.incorrectInput) {
-                    if (Database.checkIfQuizExists(DataCollection.quizInput.get(1))) {
-                        ErrorHandling.incorrectInput = true;
-                        ErrorHandling.errorsList.add(Database.errorList.toString());
-                        quizzes.clear();
-                    }
-                }
-
-                //Defining resultType
-                if (DataCollection.quizInput.get(5) == null) resultType = DataCollection.quizInput.get(6);
-                else resultType = DataCollection.quizInput.get(5);
-
-                //4.1.8 Create quiz object if user input contains no errors
-                if (!ErrorHandling.incorrectInput) {
-                    resetQuizzesList();
-                    Quiz randomQuiz = new Quiz(DataCollection.quizInput.get(1),
-                            ErrorHandling.inputOperators,
-                            Integer.parseInt(DataCollection.quizInput.get(2)),
-                            Integer.parseInt(DataCollection.quizInput.get(3)),
-                            Integer.parseInt(DataCollection.quizInput.get(4)),
-                            resultType);
-                    quizzes.add(randomQuiz);
-                    Generator.generateAllExpressions();
-                    Generator.concatenateExpressionsAndResults();
-                    randomQuiz.setQuizResultsAndExpressions();
-
-                    break;
-                }
-            case "resultRangeQuiz":
-
-                //4.1.9 Check if quiz exists
-                if (!ErrorHandling.incorrectInput) {
-                    if (Database.checkIfQuizExists(DataCollection.quizInput.get(1))) {
-                        ErrorHandling.incorrectInput = true;
-                        ErrorHandling.errorsList.add(Database.errorList.toString());
-                        quizzes.clear();
-                    }
-                }
-
-                //Defining resultType
-                if (DataCollection.quizInput.get(5) == null) resultType = DataCollection.quizInput.get(6);
-                else resultType = DataCollection.quizInput.get(5);
-
-                //4.1.8 Create quiz object if user input contains no errors
-                if (!ErrorHandling.incorrectInput) {
-                    resetQuizzesList();
-                    Quiz resultRangeQuiz = new Quiz(DataCollection.quizInput.get(1),
-                            ErrorHandling.inputOperators,
-                            Integer.parseInt(DataCollection.quizInput.get(2)),
-                            Integer.parseInt(DataCollection.quizInput.get(3)),
-                            Integer.parseInt(DataCollection.quizInput.get(4)),
-                            resultType,
-                            Integer.parseInt(DataCollection.quizInput.get(7)),
-                            Integer.parseInt(DataCollection.quizInput.get(8)));
-                    quizzes.add(resultRangeQuiz);
-                    Generator.generateAllExpressions();
-                    Generator.concatenateExpressionsAndResults();
-                    resultRangeQuiz.setQuizResultsAndExpressions();
-                    break;
-                }
-            case "fixedResultQuiz":
-
-                //4.1.9 Check if quiz exists
-                if (!ErrorHandling.incorrectInput) {
-                    if (Database.checkIfQuizExists(DataCollection.quizInput.get(1))) {
-                        ErrorHandling.incorrectInput = true;
-                        ErrorHandling.errorsList.add(Database.errorList.toString());
-                        quizzes.clear();
-                    }
-                }
-
-                //Defining resultType
-                if (DataCollection.quizInput.get(5) == null) resultType = DataCollection.quizInput.get(6);
-                else resultType = DataCollection.quizInput.get(5);
-
-                //4.1.8 Create quiz object if user input contains no errors
-                if (!ErrorHandling.incorrectInput) {
-                    resetQuizzesList();
-                    Quiz fixedResultQuiz = new Quiz(DataCollection.quizInput.get(1),
-                            ErrorHandling.inputOperators,
-                            Integer.parseInt(DataCollection.quizInput.get(2)),
-                            Integer.parseInt(DataCollection.quizInput.get(3)),
-                            Integer.parseInt(DataCollection.quizInput.get(4)),
-                            Integer.parseInt(DataCollection.quizInput.get(5)));
-                    quizzes.add(fixedResultQuiz);
-                    Generator.generateAllExpressions();
-                    Generator.concatenateExpressionsAndResults();
-                    fixedResultQuiz.setQuizResultsAndExpressions();
-                    break;
-                }
-        }
     }
 }
