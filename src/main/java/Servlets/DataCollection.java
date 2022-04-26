@@ -84,7 +84,6 @@ public class DataCollection extends HttpServlet {
             }
             //1.2.4 Redirecting to error handling servlet
             RequestDispatcher rd = req.getRequestDispatcher("/ErrorHandling");
-            System.out.println("Goes to error handling");
             try {
                 rd.forward(req, resp);
             } catch (ServletException | IOException e) {
@@ -109,7 +108,6 @@ public class DataCollection extends HttpServlet {
         } else if (!req.getParameter("command").equals("generateQuiz") &&
                 !req.getParameter("command").equals("generateAgain") &&
                 req.getParameter("command") != null) {
-
             //1.4.1 Saving other commands
             commands.add(req.getParameter("command"));
 

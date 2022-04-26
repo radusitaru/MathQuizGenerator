@@ -89,6 +89,7 @@ public class Driver extends HttpServlet {
                     //2.2.2.1 Reset quiz & expression lists
                     Quiz.resetQuizzesList();
                     Generator.clearAllGeneratorLists();
+                    ErrorHandling.errorsList.clear();
 
                     //2.2.2.2 Redirect back to Menu
                     RequestDispatcher rd7 = req.getRequestDispatcher("/Navigation/Menu.html");
@@ -101,10 +102,10 @@ public class Driver extends HttpServlet {
 
                 //2.2.3 Get results quiz from database:
                 case "dbQuizName":
-
                     //2.2.3.1 Pulling quiz fromDB
                     if (getFromDB(req.getParameter("quizName"))) {
 
+                        ErrorHandling.errorsList.clear();
                         //2.2.3.2 Redirect to results page once commands are completed and
                         RequestDispatcher rd9 = req.getRequestDispatcher("/Results/ExistingQuizResults.jsp");
                         try {
@@ -112,12 +113,21 @@ public class Driver extends HttpServlet {
                         } catch (ServletException | IOException e) {
                             e.printStackTrace();
                         }
-                    } else ErrorHandling.errorsList.add("<b>Error #1: No such quiz in database, try again");
-                    RequestDispatcher rd4 = req.getRequestDispatcher("/Navigation/ExistingQuiz.jsp");
-                    try {
-                        rd4.forward(req, resp);
-                    } catch (ServletException | IOException e) {
-                        e.printStackTrace();
+                    } else {
+
+                        //2.3.2.3 Clearing errorlist
+                        ErrorHandling.errorsList.clear();
+
+                        //2.3.2.4 Add error in case quiz not found
+                        ErrorHandling.errorsList.add("<b>Error #1: No such quiz in database, try again");
+
+                        //2.3.2.5 Redirect back to search quiz in database
+                        RequestDispatcher rd4 = req.getRequestDispatcher("/Navigation/ExistingQuiz.jsp");
+                        try {
+                            rd4.forward(req, resp);
+                        } catch (ServletException | IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 default:

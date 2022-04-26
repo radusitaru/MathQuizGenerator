@@ -25,9 +25,6 @@ public class ErrorHandling extends HttpServlet {
         //Check and save errors
         checkAndSaveErrors();
 
-        System.out.println("Error handling incorrect input: ");
-        System.out.println(incorrectInput);
-
         //If user input is incorrect, repeat intake
         if (incorrectInput) {
             RequestDispatcher rd = req.getRequestDispatcher("QuizTypes/" + DataCollection.quizInput.get(0) + ".jsp");
@@ -123,6 +120,7 @@ public class ErrorHandling extends HttpServlet {
             //2.1.9 Checking if input is too long (max 40 characters)
             if (userInput.length() > 40) isTooLong = true;
         }
+        else isEmptyInput=true;
     }
 
     //2.2 Check result type
@@ -161,7 +159,7 @@ public class ErrorHandling extends HttpServlet {
 
     //2.4 Check quiz name
     public static void checkQuizName(String quizNameInput) {
-        if (quizNameInput == null) {
+        if (Objects.equals(quizNameInput, "")) {
             isEmptyName = true;
         }
     }
@@ -256,7 +254,7 @@ public class ErrorHandling extends HttpServlet {
             isEmptyInput = false;
         }
         if (isEmptyName) {
-            errorsList.add("<br> <b>Error #" + errorCounter + "</b> " + parameter + ": " + "empty quizName");
+            errorsList.add("<br> <b>Error #" + errorCounter + "</b> " + parameter + ": " + "empty quiz name");
             errorCounter++;
             incorrectInput = true;
             isEmptyName = false;
@@ -279,5 +277,6 @@ public class ErrorHandling extends HttpServlet {
     static public void resetErrorList() {
         errorsList.clear();
         errorCounter = 1;
+        incorrectInput=false;
     }
 }

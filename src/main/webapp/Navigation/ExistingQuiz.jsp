@@ -28,7 +28,7 @@
 </form>
 <body>
 <br>
-<form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Navigation/Menu.html" method="POST">
+<form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/DataCollection" method="POST">
     <input type="hidden" id="command" name="command" value="backToMenu">
     <input type="submit" value="Back"/>
 </form>
