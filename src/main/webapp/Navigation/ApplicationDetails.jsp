@@ -45,7 +45,8 @@
         for a different function of the application: </h4>
 
     - Generator: This servlet is responsible for generating the mathematical expressions and results.<br>
-    - Quiz: This servlet is responsible for creating a quiz object, which stores all the information regarding the quiz which is being created.
+    - Quiz: This servlet is responsible for creating a quiz object, which stores all the information regarding the quiz
+    which is being created.
     This object is used throughout the whole application as input for other methods.<br>
     - Database: This servlet is responsible for saving and loading data from and to the database.<br>
     - Driver: This servlet is responsible for running commands between frontend and backend.<br>

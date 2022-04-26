@@ -338,6 +338,7 @@ public class Quiz extends HttpServlet {
     public void setQuizResultsAndExpressions(String expressionAndResults) {
         this.quizResultsAndExpressions = expressionAndResults;
     }
+
     static public void resetQuizzesList() {
         quizzes.clear();
     }

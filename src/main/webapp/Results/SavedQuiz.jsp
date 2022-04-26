@@ -9,7 +9,7 @@
 <html>
 <html lang="en" xmlns:color="http://www.w3.org/1999/xhtml">
 <html style="background-color:CornSilk;color:Black;text-align:center;" lang="">
-<html  lang="">
+<html lang="">
 <head>
     <title>Quiz saved</title>
 </head>

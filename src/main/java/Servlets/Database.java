@@ -130,7 +130,7 @@ public class Database extends HttpServlet {
 
     //2.3 Get quiz from database
     public static boolean getFromDB(String quizName) {
-        boolean isInDB=false;
+        boolean isInDB = false;
         try {
 
             //2.3.1 Clearing quizFromDB list
@@ -156,7 +156,7 @@ public class Database extends HttpServlet {
             //2.3.6 Execute query as long as there are still items in database: introduce results in quiz object
             while (rs.next()) {
                 if (rs.getString("quizname") != null) {
-                    isInDB=true;
+                    isInDB = true;
                     pulledQuiz.setQuizName((rs.getString("quizname")));
                     pulledQuiz.setQuizType((rs.getString("quiztype")));
                     pulledQuiz.setQuizId((rs.getString("quizid")));
@@ -174,5 +174,6 @@ public class Database extends HttpServlet {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-    return isInDB;}
+        return isInDB;
+    }
 }

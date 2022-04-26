@@ -28,7 +28,8 @@
 
     <h2>2. Fix current bugs:</h2>
 
-    <h3>2.1 Prompt error on user input which is not realistic - example: highestNumber = 10, numbers in expression = 50, operators = + & *, fixed result = 0.</h3>
+    <h3>2.1 Prompt error on user input which is not realistic - example: highestNumber = 10, numbers in expression = 50,
+        operators = + & *, fixed result = 0.</h3>
     <h3>2.2 Improve quiz generation speed by improving the quiz generation formula.</h3>
     <h2>
         *******************************************************************************************************************************************************************</h2>
