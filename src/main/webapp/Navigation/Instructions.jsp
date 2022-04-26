@@ -40,8 +40,8 @@
     - Fixed result, (only in fixed result quiz)=> fixed result of each expression (cannot be negative,non-digit, dot in
     front,dot at end or empty, otherwise error will show up) <br><br>
 
-    <h2>2. Find quiz in database:</h2>
-    <h3> 2.1 Click on database button from Menu.</h3>
+    <h2>2. Search quiz in database:</h2>
+    <h3> 2.1 Click on search quiz in database button from Menu.</h3>
     <h3> 2.2 Insert your quiz name and click search.</h3>
     <h2>
         *******************************************************************************************************************************************************************</h2>
