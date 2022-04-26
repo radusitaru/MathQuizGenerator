@@ -3,6 +3,7 @@
 <%@ page import="Servlets.Driver" %>
 <%@ page import="static Servlets.Generator.allExpressionsAndResults" %>
 <%@ page import="Servlets.ErrorHandling" %>
+<%@ page import="Servlets.Quiz" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--
   Created by IntelliJ IDEA.
@@ -23,10 +24,10 @@
         *********************************************************************************************************************************************************************</h2>
 
     <h3>Quiz name:</h3>
-    <b><%=ErrorHandling.quizzes.get(0).getQuizName()%>
+    <b><%=Quiz.quizzes.get(0).getQuizName()%>
     </b> <br>
     <h3>Quiz type:</h3>
-    <b><%=ErrorHandling.quizzes.get(0).getQuizType()%>
+    <b><%=Quiz.quizzes.get(0).getQuizType()%>
     </b>
     <br>
     <br>
@@ -36,13 +37,13 @@
     <br>
     <div></div>
     <br>
-    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/DataCollection" method="POST">
         <input type="hidden" id="command" name="command" value="generateAgain">
         <input type="submit" value="Generate again"/>
     </form>
     <div></div>
     <br>
-    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/DataCollection" method="POST">
         <input type="hidden" id="command" name="command" value="saveQuizInDB">
         <input type="submit" value="SaveQuizInDB"/>
     </form>

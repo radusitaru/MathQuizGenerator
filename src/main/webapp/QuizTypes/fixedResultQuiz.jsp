@@ -12,7 +12,7 @@
     <h1 style="text-align: center">Fixed result quiz</h1>
     <h2>
         *********************************************************************************************************************************************************************</h2>
-    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
+    <form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/DataCollection" method="POST">
         <b>Quiz name:</b> <input type="text" name="quizName" id="quizName"/> </br>
         <b>Highest number:</b> <input type="text" name="highestNumber" id="highestNumber"/>  </br>
         <b>Numbers in expression:</b> <input type="text" name="numbersInExpression" id="numbersInExpression"/>  </br>

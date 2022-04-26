@@ -68,7 +68,7 @@ public class Database extends HttpServlet {
     }
 
     //2.2 Fetching data from database
-    public static boolean checkIfQuizExists(Quiz quiz) {
+    public static boolean checkIfQuizExists(String quizName) {
         boolean quizExists = false;
         try {
 
@@ -88,7 +88,7 @@ public class Database extends HttpServlet {
             //2.2.4 Execute query as long as there are still items in database
             while (rs.next()) {
                 if (rs.getString("quizname") != null) {
-                    quizNames.add(rs.getString("quizname").substring(0, quiz.getQuizName().length()));
+                    quizNames.add(rs.getString("quizname").substring(0, quizName.length()));
                 }
             }
             rs.close();
@@ -97,8 +97,8 @@ public class Database extends HttpServlet {
             //2.2.5 If quizName input is not null, check if quiz exists in DB based on quizName
             if (quizNames != null) {
                 for (int i = 0; i < quizNames.size(); i++) {
-                    if (quizNames.get(i).equals(quiz.getQuizName())) {
-                        System.out.println("QuizNameLIST :" + quizNames.get(i) + "quizNameDB: " + quiz.getQuizName());
+                    if (quizNames.get(i).equalsIgnoreCase(quizName)) {
+                        System.out.println("QuizNameLIST :" + quizNames.get(i) + "quizNameDB: " + quizName);
                         quizExists = true;
                         errorList.add("Quiz already exists under this name");
                     }
@@ -110,7 +110,7 @@ public class Database extends HttpServlet {
             ResultSet rs2 = pSt2.executeQuery();
             while (rs2.next()) {
                 if (rs2.getString("parameters") != null) {
-                    quizParameters.add(rs2.getString("parameters").substring(0, quiz.getParameters().length()));
+                    quizParameters.add(rs2.getString("parameters").substring(0, quizName.length()));
                 }
             }
             rs2.close();
@@ -120,7 +120,7 @@ public class Database extends HttpServlet {
             //2.2.7 If quizParameters input is not null, check if quiz exists in DB based on quizParameters
             if (quizParameters != null) {
                 for (int i = 0; i < quizParameters.size(); i++) {
-                    if (quizParameters.get(i).equalsIgnoreCase(quiz.getParameters())) {
+                    if (quizParameters.get(i).equalsIgnoreCase(quizName)) {
                         quizExists = true;
                         errorList.add("Quiz already exists under these parameters");
                     }

@@ -2,7 +2,7 @@
 
 1. Application scope:
 
-- Create mathematical quizzes based on user input
+- Create mathematical quizzes based on user input.
 
 2. Application functions:
 
@@ -20,14 +20,15 @@
 
  3. Application code structure
 
- 3.1 The backend of this application is made of 4 java classes, which are servlets. Each servlet is responsible for a different function of the application:
+ 3.1 The backend of this application is made of 5 java classes, which are servlets. Each servlet is responsible for a different function of the application:
 
  - Generator: This servlet is responsible for generating the mathematical expressions and results.
  - Quiz: This servlet is responsible for creating a quiz object, which stores all the information regarding the quiz which is being created.
          This object is used throughout the whole application as input for other methods.
  - Database: This servlet is responsible for saving and loading data from and to the database.
- - Driver: This servlet is responsible for running commands between frontend and backend. To be more specific, it is responsible for reading user input from the frontend,
-           checking for input mistakes, converting input format to desired format that is used in other backend servlets, creating the quiz objects based on user input.
+ - Driver: This servlet is responsible for running commands between frontend and backend.
+ - ErrorHandling: This servlet is responsible for checking for input mistakes.
+ - DataCollection: This servlet is responsible for reading user input from the frontend.
 
  3.2 The frontend of this application is made of 3 folders: Navigation, QuizTypes and Results:
 
@@ -47,6 +48,25 @@
 
  - Results: JSP file responsible for displaying the newly create quiz details.
  - ExistingQuizResults: JSP file responsible for displaying the quiz details loaded from database.
+
+ 3.3 Technologies used
+
+ 3.3.1 Tomcat
+ - Used for exploding java classes on web
+
+ 3.3.2 Servlets
+ - Used for running java classes on web
+
+ 3.3.3 JDBC
+ - Used for communicating between java classes and database
+
+ 3.3.4 HTML & JSP
+ - Used for the frontend of this application
+
+ 3.3.5 ScriptEngine library
+ - Used for calculating expression results
+
+
 
 ****************************************************************************************************************************************************************
 

@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -70,8 +69,8 @@ public class Generator extends HttpServlet {
     //2.2 Generating a list of numbers based on a maximum number and a defined list size
     static public void generateNumberList() {
         numbersList.clear();
-        for (int i = 0; i < ErrorHandling.quizzes.get(0).getNumbersInExpression(); i++) {
-            numbersList.add(randomGenerator.nextInt(ErrorHandling.quizzes.get(0).getHighestNumber()) + 1);
+        for (int i = 0; i < Quiz.quizzes.get(0).getNumbersInExpression(); i++) {
+            numbersList.add(randomGenerator.nextInt(Quiz.quizzes.get(0).getHighestNumber()) + 1);
         }
     }
 
@@ -101,7 +100,7 @@ public class Generator extends HttpServlet {
 
             //2.4.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < ErrorHandling.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < ErrorHandling.quizzes.get(0).getNumbersInExpression(); currentNr++) {
+            for (int currentNr = 0; currentNr < Quiz.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < Quiz.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.4.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -163,7 +162,7 @@ public class Generator extends HttpServlet {
 
             //2.5.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr < ErrorHandling.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < ErrorHandling.quizzes.get(0).getNumbersInExpression(); currentNr++) {
+            for (int currentNr = 0; currentNr < Quiz.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < Quiz.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.5.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -228,7 +227,7 @@ public class Generator extends HttpServlet {
 
             //2.6.4 Distributing numbers and operators evenly in the expression
             int nrCounter = 0;
-            for (int currentNr = 0; currentNr <ErrorHandling.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < ErrorHandling.quizzes.get(0).getNumbersInExpression(); currentNr++) {
+            for (int currentNr = 0; currentNr < Quiz.quizzes.get(0).getNumbersInExpression() + operatorsList.size() - 1 && nrCounter < Quiz.quizzes.get(0).getNumbersInExpression(); currentNr++) {
                 //2.6.4.1 By using module %2, the operators and numbers are spread equally
                 if (currentNr % 2 == 0) {
                     oneExpression.add(String.valueOf(numbersList.get(nrCounter)));
@@ -286,24 +285,24 @@ public class Generator extends HttpServlet {
     static public String generateAllExpressions() {
         clearAllGeneratorLists();
 
-        for (int i = 0; i < ErrorHandling.quizzes.get(0).getNumberOfExpressions(); i++) {
+        for (int i = 0; i < Quiz.quizzes.get(0).getNumberOfExpressions(); i++) {
 
             //2.9.1 Generating numbers and operators
             generateNumberList();
             generateOperatorList();
 
             //2.9.2 Generating correct expressions based on quiz type
-            switch (ErrorHandling.quizzes.get(0).getQuizType()) {
+            switch (Quiz.quizzes.get(0).getQuizType()) {
                 case "randomQuiz":
-                    randomExpression(ErrorHandling.quizzes.get(0).getResultType());
+                    randomExpression(Quiz.quizzes.get(0).getResultType());
                     break;
 
                 case "fixedResultQuiz":
-                    fixedResultExpression(ErrorHandling.quizzes.get(0).getFixedResult());
+                    fixedResultExpression(Quiz.quizzes.get(0).getFixedResult());
                     break;
 
                 case "resultRangeQuiz":
-                    resultRangeExpression(ErrorHandling.quizzes.get(0).getResultType(), ErrorHandling.quizzes.get(0).getResultMin(), ErrorHandling.quizzes.get(0).getResultMax());
+                    resultRangeExpression(Quiz.quizzes.get(0).getResultType(), Quiz.quizzes.get(0).getResultMin(), Quiz.quizzes.get(0).getResultMax());
                     break;
             }
 

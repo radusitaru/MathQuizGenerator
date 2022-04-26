@@ -20,7 +20,7 @@
 <h1><b>Search by quiz name</b></h1>
 <br>
 <br>
-<form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/Driver" method="POST">
+<form name="submit" action="http://localhost:8080/MathQuizGenerator_war_exploded/DataCollection" method="POST">
     <input type="hidden" id="command" name="command" value="dbQuizName">
     quizName: <input type="text" name="quizName" id="quizName"/>  </br>
     <br>
